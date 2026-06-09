@@ -87,6 +87,28 @@ def record_real_tx(step: int, tx_hash: str, chain: str = "avalanche-fuji"):
     # In real harness this could append to a json manifest or auto-edit files.
     return {"step": step, "tx": tx_hash, "chain": chain, "timestamp": int(time.time())}
 
+def save_hash_to_manifest(step: int, tx_hash: str, chain: str = "avalanche-fuji", manifest_path: str = "Scripts/live_hashes_manifest.json"):
+    """Save recorded hash to a JSON manifest for easy site/E2E/docs sync."""
+    import json, os
+    entry = {"step": step, "tx": tx_hash, "chain": chain, "url": f"https://testnet.snowtrace.io/tx/{tx_hash}" if "fuji" in chain else f"https://solscan.io/tx/{tx_hash}"}
+    data = {"phase": 5, "event": "LIVE_DEPLOY", "hashes": []}
+    if os.path.exists(manifest_path):
+        with open(manifest_path) as f:
+            data = json.load(f)
+    data["hashes"] = [h for h in data.get("hashes", []) if h["step"] != step] + [entry]
+    data["last_updated"] = int(time.time())
+    with open(manifest_path, "w") as f:
+        json.dump(data, f, indent=2)
+    print(f"  Saved to {manifest_path}. Re-run E2E or sync to site.")
+    return entry
+
+def load_manifest(manifest_path: str = "Scripts/live_hashes_manifest.json"):
+    import json, os
+    if os.path.exists(manifest_path):
+        with open(manifest_path) as f:
+            return json.load(f)
+    return None
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--phase", type=int, default=0)
@@ -99,14 +121,20 @@ def main():
 
     if args.record_tx:
         record_real_tx(args.record_step, args.record_tx)
+        save_hash_to_manifest(args.record_step, args.record_tx)
         print("Run again with next real hash or --phase X to continue sim.")
         return
 
+    manifest = load_manifest()
     payload = make_bridge_payload(args.event, args.amount, phase=args.phase)
 
     print(f"TROPTIONS RAILS - E2E Golden Path (phase {args.phase}, mode {args.mode})")
     for s in range(1, 8):
         simulate_step(s, payload, args.phase)
+    if manifest and manifest.get("hashes"):
+        print("\n[MANIFEST] Using live hashes:")
+        for h in manifest["hashes"]:
+            print(f"  Step {h['step']}: {h['tx']} ({h.get('url', '')})")
     print("\nGates for Phase 0: Hashes recorded, validator green, proofs updated.")
     print("To record LIVE: python Scripts/e2e_golden_path.py --record-tx 0xREALHASH --record-step 3")
     print("Update E2E_GOLDEN_PATH.md and site with real txs after deploy. Then re-run --phase 5 for full report.")
