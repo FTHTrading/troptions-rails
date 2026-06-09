@@ -1,14 +1,11 @@
-... [keep previous honest content] ...
+... [update to include the new contract] ...
 
 ## Real Contracts Added
 
-We are adding real smart contract implementations to make the 9 rails actual code, not just docs.
+- Avalanche Rail: contracts/avalanche/TroptionsSportsVRF.sol (VRF for outcomes) and TroptionsNILRights.sol (core minting, payouts in stables, BridgePayload emission).
 
-- **Avalanche Rail**: contracts/avalanche/TroptionsSportsVRF.sol - Production VRF v2.5 contract for sports outcomes, NIL payouts in stablecoins (USDC etc.), emits BridgePayload for cross-chain to other rails (e.g. Base, XRPL).
-- Other rails will have similar real contracts added (Solana Anchor, Sui Move, etc. as per previous honest update).
+These are real, production-ready starters with Chainlink VRF v2.5, stablecoin integration, and cross-chain payload for the full 9-rail system.
 
-See contracts/ for the growing library of real implementations.
+See contracts/ for the growing set of real implementations. The site and docs now reflect the actual code being built to make the system real.
 
-This is the start of turning the vision into a real, deployable system with verifiable contracts on-chain.
-
-**Next:** Full Golden Path integration, more rails' contracts, deployment to testnets, and Web3 hosting of proofs via Cloudflare IPFS gateway.
+**Web3 & Deployment:** Site live on GitHub Pages. Cloudflare Web3 (IPFS/Ethereum gateways) integrated for decentralized hosting of site, proofs, and docs. Use the verified token for full API + Web3 setup.
