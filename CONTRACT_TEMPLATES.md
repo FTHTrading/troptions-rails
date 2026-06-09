@@ -1,14 +1,28 @@
-**Troptions Senior-Level Contract Template Suite (Expanded - 13+ Contracts)**
+**Troptions Senior-Level Contract Template Suite (Expanded - 16 Contracts)**
 
-... (previous content) ...
+Production-grade, audit-ready Solidity templates for the Troptions 9-rail system (practical focus: XRPL, Solana, Base, Avalanche, Stacks/sBTC, Chainlink + Bitcoin/Stellar as core; others as adapters/future).
 
-**Additional Production Contracts:**
+**Core Contracts (polished with NatSpec, guards, BridgePayload (uint64 selectors), LPS-1, stables):**
 
-10. TroptionsLegacyVault.sol - 5-Proof Estate Protection (time-locked, LPS-1, BridgePayload, guards).
-11. TroptionsGMIIEOracle.sol - GMIIE Intelligence + XXXIII (event scores, verified, payload integration for NIL/VRF).
-12. TroptionsOrchestrator.sol - Master Golden Path Controller (Registry + Connector routing, best-rail logic, guards).
-13. TroptionsFeeManager.sol - Dynamic Fees (bps, payload-based calc, exemptions, integrate with Orchestrator).
+1-9. [previous list including BridgePayload, VRF, NIL, CCIP, Automation, AccessControl, RailRegistry, StablecoinGateway, RailConnector, LegacyVault, GMIIEOracle, Orchestrator, FeeManager]
 
-Full suite now covers core EVM/Chainlink, registry/connector/gateway for routing, legacy/GMIIE oracles, orchestrator, fees. Focused on 6-7 core rails + adapters for all systems. See contracts/ and professional site for details and color-coded status.
+**Institutional Settlement Infrastructure:**
+
+14. TroptionsAtomicSettlement.sol - Core Atomic Swap + Settlement (timeout protection, LPS-1, events).
+15. TroptionsFinalityRouter.sol - Multi-Chain Finality + Settlement Router (trusted chains, nonce protection, ties to atomic).
+16. TroptionsMultiSigEscrow.sol - Institutional Multi-Sig Escrow (multi-signer release for high-value, integrated with payload).
+17. TroptionsSettlementHub.sol - Central Settlement Hub (orchestrates atomic, multisig, finality, Golden Path via Orchestrator).
+
+**Usage & Integration:**
+- All use BridgePayload for unified flows (Golden Path: VRF -> NIL -> Orchestrator -> SettlementHub -> Atomic/MultiSig/FinalityRouter -> CCIP/Gateway to target rail).
+- LPS-1/XXXIII hooks in all.
+- Deploy via Foundry/Hardhat, register in RailRegistry, route via Connector/Orchestrator/Hub, control via AccessControl.
+- 1-Click via enhanced activate.sh (references full suite + settlement infra).
+
+**9-Rail Adapters (BridgePayload compatible):** Enhanced starters in solana/, sui/, stacks/, etc. for full composition.
+
+See contracts/ for source. Professional site has Senior Templates box with color-coded status (🔵 BUILT for core EVM/Chainlink + settlement suite). Ready for audit, orchestrator, revenue-driven activation.
+
+Recommendation: Master the focused core + these settlement tools first for institutional NIL/RWA/stable volume.
 
 © 2026 FTH Trading / UnyKorn
