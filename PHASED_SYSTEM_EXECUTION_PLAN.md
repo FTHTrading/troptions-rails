@@ -1,1 +1,1 @@
-[Updated status with site cleanup, 100% badges, new flow diagram, Cloudflare subdomain and Web3 emails fully integrated, Bryan updates]
+[Updated status with site polish, 100% flows, Cloudflare subdomain, emails, Bryan]
