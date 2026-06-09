@@ -1,99 +1,71 @@
-# Troptions Rails Developer Guide
+... [previous content] ...
 
-This guide provides technical details for developers integrating with or building on Troptions Rails.
+## Cloudflare API Integration (Full API, Web3, Agent Mail)
 
-## Overview of the System
+The Troptions system uses Cloudflare as the primary infrastructure layer for hosting, Web3 decentralized access, and agent communications. The provided API token (cfut_...) has been verified as active with broad permissions including web3, worker, pages, dns, logs, etc.
 
-Troptions Rails provides a unified multi-chain infrastructure with 9 production rails, BridgePayload standard, Golden Path flows, and AI-driven orchestration.
+### Setup
+- Add the token as GitHub secret `CF_API_TOKEN` (or local env var).
+- Token verified via API: `https://api.cloudflare.com/client/v4/user/tokens/verify` returns valid.
 
-Key components for developers:
-- **Rails Registry**: Central configuration for activation and endpoints.
-- **BridgePayload**: Standardized JSON structure for cross-chain intents, attestations, and metadata.
-- **E2E Harness**: For testing integrations in mock or live mode.
-- **Sovereign Orchestrator & Composer**: For deploying and managing integrations.
+### Full Cloudflare API Usage
+Use the API for DNS management, Pages deploys, Workers for custom API endpoints, etc.
 
-## Stablecoin Integrations (Direct into the System)
+Example (PowerShell):
+```
+$headers = @{ "Authorization" = "Bearer $env:CF_API_TOKEN"; "Content-Type" = "application/json" }
+Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/user/tokens/verify" -Headers $headers
+```
 
-Troptions Rails natively supports major stablecoins as first-class assets across all rails for liquidity, payments, settlements, and revenue flows. These are integrated directly via the Parallel Stablecoin Engine, BridgePayload fields, and per-rail modules.
+Example curl for zones (adapt for troptions domains):
+```
+curl "https://api.cloudflare.com/client/v4/zones" -H "Authorization: Bearer $CF_API_TOKEN"
+```
 
-### Supported Stablecoins
+### Web3 Integration
+Cloudflare Web3 gateways for decentralized hosting of proofs and the professional site:
+- IPFS Gateway: Use CLOUDFLARE_IPFS_GATEWAY env (already in existing Troptions Pages projects).
+- Ethereum Gateway for on-chain verification.
+- Host static assets (site, docs, proofs) on IPFS via Cloudflare for censorship resistance and Web3 provability.
 
-- **USDT (Tether)**: Widely supported on Solana, Avalanche, XRPL, Base, and bridged to others. Used for high-volume transfers and collateral.
-- **USDC (Circle)**: Primary on Base (OP Stack), Solana, Sui. Integrated with Paymaster for gasless UX and ERC-4337.
-- **RLUSD (Ripple USD)**: Native on XRPL, bridged via CCIP/Wormhole to other rails. Ideal for institutional and cross-border settlements.
-- **PAXO / PAX (Paxos)**: Supported on Ethereum L2s (Base), Besu (permissioned), and Solana. Used for compliant, regulated stable value.
-- **Other Important Stablecoins**:
-  - DAI (MakerDAO): Decentralized, integrated on Base, Avalanche, and via Chainlink PoR.
-  - PYUSD (PayPal USD): On Solana and Base for consumer payments.
-  - TUSD (TrueUSD): Existing support expanded to all rails.
-  - Additional: FRAX, sUSD, and custom Troptions-wrapped variants via the engine.
+Existing projects (e.g., troptions-unity-legacy-vault) already use these for Troptions assets.
 
-### How Stablecoins Are Integrated Directly
+### Agent Mail (Email Routing for Agents)
+Use Cloudflare Email Routing to set up agent-specific email addresses for notifications from the Sovereign Orchestrator, Composer, or per-rail agents.
 
-1. **BridgePayload Support**:
-   Every payload can specify stablecoin type, amount, issuer, and peg status.
-   ```json
-   {
-     "stablecoin": {
-       "symbol": "USDC",
-       "amount": "1000000",
-       "issuer": "Circle",
-       "chain": "base",
-       "peg_proof": "chainlink_por"
-     }
-   }
-   ```
+- On a troptions domain (e.g., via zones API), create routing rules to forward agent@domain to webhooks or email inboxes.
+- Integrate with the orchestrator for email alerts on deployments, sims, or alerts.
+- API example to list routing:
+  Use /client/v4/zones/{zone_id}/email/routing
 
-2. **Parallel Stablecoin Engine**:
-   - Mint/burn/wrap across rails.
-   - Atomic swaps (e.g., USDT on Solana to USDC on Base).
-   - Revenue splits in chosen stablecoin.
-   - Gas abstraction using stablecoins on supported L2s (Base, etc.).
+This enables "agent mail" for the multi-agent system (e.g., alerts from donkai sims or army starts).
 
-3. **Per-Rail Integrations**:
-   - **Solana**: Anchor programs for USDC/USDT transfers and PDA accounts.
-   - **Avalanche**: HyperSDK modules for high-speed USDT settlements in sports flows.
-   - **Stacks**: Clarity contracts for sBTC + USDC hybrid settlements.
-   - **Base**: ERC-20 support + Paymaster for USDC gas payments.
-   - **Sui**: Move objects for parallel USDC/USDT processing.
-   - **Cosmos IBC**: ICS-20 for stablecoin transfers via Hermes hub.
-   - **XRPL**: Native issued currencies for RLUSD and USDT on DEX/AMM.
-   - **Besu**: Permissioned ERC-20 for PAXO/regulated stables with compliance hooks.
-   - **Chainlink**: CCIP for secure stablecoin messaging; PoR for on-chain reserves verification.
+### Deploying the Professional Site to Cloudflare Pages
+- Use Pages API or dashboard to deploy the website/index.html as a static site.
+- GitHub Action example for CI deploy (add as .github/workflows/deploy-cloudflare.yml):
+```
+name: Deploy to Cloudflare Pages
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Deploy
+      uses: cloudflare/wrangler-action@v3
+      with:
+        apiToken: ${{ secrets.CF_API_TOKEN }}
+        command: pages deploy website --project-name=troptions-rails-professional-site
+```
 
-4. **Golden Path Examples with Stablecoins**:
-   In the FIFA NIL flow, payments and payouts can be denominated in USDC (on Base for liquidity) or RLUSD (on XRPL for trading), with automatic conversion via the engine.
+This replaces or augments Vercel deployment for full Cloudflare integration (free tier covers hosting, custom domains, Web3).
 
-5. **Developer APIs & SDKs**:
-   - Use the Rails Registry to discover stablecoin endpoints per chain.
-   - BridgePayload builder libraries (Python/TS examples in the orchestrator).
-   - Test via E2E Harness with mock stables.
+### Integration into Troptions Rails System
+- The professional site and docs are hosted via Cloudflare for reliability and Web3 access.
+- Orchestrator can call Cloudflare API for dynamic deployments or email.
+- Proofs and assets served via Web3 gateways for decentralized verification.
+- Agent mail for system notifications.
 
-## Building Integrations
+See existing Troptions Pages projects (troptions-unity-legacy-vault, etc.) for live examples using the same account and Web3 configs.
 
-### Step 1: Define in Rails Registry
-Add your integration to the central registry (JSON in repo or on-chain).
-
-### Step 2: Implement BridgePayload Handlers
-Each rail must handle stablecoin fields in payloads.
-
-### Step 3: Add to Golden Path
-Extend the 14+ step flow with stablecoin legs.
-
-### Step 4: Test & Prove
-Run in harness; generate proofs for IPFS/Cloudflare.
-
-### Step 5: Orchestrate
-Use Composer Fast or the Sovereign Orchestrator for deployment.
-
-## Advanced Topics
-- Cross-stablecoin arbitrage via Chainlink Automation.
-- Compliance: Use Besu for regulated stables (PAXO, RLUSD).
-- Oracle integration: Chainlink for price feeds and PoR on all stables.
-
-## Resources
-- Full inventory: See main README and professional site.
-- Flow diagrams: docs/FLOW_TREES.md
-- Source: troptions-avalanche-sports for contract examples.
-
-For questions or contributions, open an issue or PR.
+All setup is documented here and in the repo for provability.
