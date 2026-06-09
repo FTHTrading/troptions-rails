@@ -140,9 +140,23 @@ def main():
             simulate_step(s, payload, args.phase)
     if manifest and manifest.get("hashes"):
         print("\n[MANIFEST] Live hashes loaded from Scripts/live_hashes_manifest.json")
+        print_site_hashes_snippet()
     print("\nGates for Phase 0: Hashes recorded, validator green, proofs updated.")
     print("To record LIVE: python Scripts/e2e_golden_path.py --record-tx 0xREALHASH --record-step 3")
-    print("Update E2E_GOLDEN_PATH.md and site with real txs after deploy. Then re-run --phase 5 for full report.")
+    print("Update E2E_GOLDEN_PATH.md and site with real txs after deploy. Then re-run --phase 5 for full report. Snippet above is ready for the professional site live hashes table.")
+
+def print_site_hashes_snippet(manifest_path: str = "Scripts/live_hashes_manifest.json"):
+    """Print ready-to-paste HTML table rows for the professional site's live hashes box."""
+    import json, os
+    if not os.path.exists(manifest_path):
+        print("No manifest found.")
+        return
+    with open(manifest_path) as f:
+        m = json.load(f)
+    print("\n<!-- Paste into troptions-pro-site-polished.html live hashes table -->")
+    for h in m.get("hashes", []):
+        print(f'<tr><td class="p-1">{h["step"]} ({"VRF" if h["step"]==4 else "Payout"})</td><td class="p-1">Avalanche Fuji</td><td class="p-1 font-mono"><a href="{h["url"]}" class="text-emerald-400 hover:underline" target="_blank">{h["tx"]}</a></td></tr>')
+    print("<!-- End paste -->")
 
 if __name__ == "__main__":
     main()
