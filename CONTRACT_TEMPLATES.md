@@ -1,12 +1,12 @@
-**Troptions Senior-Level Contract Template Suite (Expanded - 27+ Contracts)**
+**Troptions Senior-Level Contract Template Suite (Expanded - 29 Contracts)**
 
 ... (previous) ...
 
-**Risk, Analytics & Reserve Layer (New):**
-- TroptionsReserveVault.sol - Multi-Chain reserves with LPS-1 proof verification. Integrates with BridgePayload, AnalyticsHub, SettlementHub.
-- TroptionsAnalyticsHub.sol - Institutional stats/reporting (mints, payouts, users) with payload context.
+**Governance & Agent Layer (New):**
+- TroptionsGovernanceTimelock.sol - 48h timelock for upgrades/admin, BridgePayload for audit. Ties to AccessControl, Registry, Hub.
+- TroptionsAgentRegistry.sol - AI agent auth for Sovereign Orchestrator. Integrates BridgePayload, Pausable.
 
-Full suite now includes reserve management and analytics for institutional NIL/RWA/stable flows across 9+ rails.
+Full suite now includes governance and multi-agent control for institutional 9+ rail system.
 
 See contracts/ for source. Professional site updated with color-coded grid.
 
