@@ -1,24 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
- import "../BridgePayload.sol";
+import "./BridgePayload.sol";
 import "./TroptionsSportsVRF.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {Pausable} from "@openzeppelin/contracts/security/Pausable.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title TroptionsNILRights
- * @notice Core senior template for minting NIL bundles and executing performance-based payouts.
- * @dev Consumes verified randomness from TroptionsSportsVRF (via getEventRandomSeed).
- *      Emits BridgePayload on every key action for cross-rail (CCIP to Base, Solana, XRPL, etc.).
- *      Direct stablecoin payouts. LPS-1 / XXXIII provenance required on mint.
- *      Designed for triggering by TroptionsAutomationKeeper (Chainlink Automation).
- *      Production patterns: Pausable, ReentrancyGuard, custom errors, full Natspec.
- * @custom:security-contact security@troptions.example
+ * @notice Senior core template for NIL bundle minting and performance payouts.
+ * @dev Consumes VRF seed from TroptionsSportsVRF for fair attributes/royalties.
+ *      Requires LPS-1 provenance (lps1Hash). Emits BridgePayload on mint/payout for CCIP cross-rail.
+ *      Direct stable integration. Ready for TroptionsAutomation.
+ *      Pausable, ReentrancyGuard, full NatSpec.
  */
-contract TroptionsNILRights is Ownable, ReentrancyGuard, Pausable {
+contract TroptionsNILRights is Ownable, Pausable, ReentrancyGuard {
     TroptionsSportsVRF public vrf;
     IERC20 public stablecoin;
 
@@ -30,107 +28,70 @@ contract TroptionsNILRights is Ownable, ReentrancyGuard, Pausable {
     event NILPayoutExecuted(bytes32 indexed eventId, address indexed athlete, uint256 amount, uint256 randomOutcome);
     event BridgePayloadEmitted(bytes32 indexed payloadHash, BridgePayload payload);
 
-    error AlreadyMinted();
-    error MissingProvenance();
-    error VRFNotFulfilled();
-    error InsufficientPool();
-    error PayoutAlreadyExecuted();
-
-    constructor(address _vrfAddress, address _stablecoin) Ownable(msg.sender) {
-        vrf = TroptionsSportsVRF(_vrfAddress);
-        stablecoin = IERC20(_stablecoin);
+    constructor(address _vrf, address _stable) Ownable(msg.sender) {
+        vrf = TroptionsSportsVRF(_vrf);
+        stablecoin = IERC20(_stable);
     }
 
-    function setVRF(address _vrfAddress) external onlyOwner {
-        vrf = TroptionsSportsVRF(_vrfAddress);
-    }
+    function setVRF(address _vrf) external onlyOwner { vrf = TroptionsSportsVRF(_vrf); }
+    function setStablecoin(address _stable) external onlyOwner { stablecoin = IERC20(_stable); }
 
-    function setStablecoin(address _stablecoin) external onlyOwner {
-        stablecoin = IERC20(_stablecoin);
-    }
+    function mintNILBundle(BridgePayload calldata payload) external whenNotPaused nonReentrant {
+        require(!minted[payload.assetId], "Already minted");
+        require(payload.lps1Hash != bytes32(0), "Missing LPS-1 / XXXIII provenance");
 
-    /**
-     * @notice Mint a NIL bundle. Requires a fulfilled VRF seed and valid LPS-1 provenance hash.
-     *         The VRF seed is used for fair on-chain attribute / royalty distribution.
-     */
-    function mintNILBundle(BridgePayload calldata payload)
-        external
-        whenNotPaused
-        nonReentrant
-    {
-        if (minted[payload.assetId]) revert AlreadyMinted();
-        if (payload.lps1Hash == bytes32(0)) revert MissingProvenance(); // Hook for XXXIII / GMIIE / LPS-1 system
+        uint256 seed = vrf.eventRandomSeed(payload.eventId);
+        require(seed != 0, "VRF not fulfilled");
 
-        uint256 seed = vrf.getEventRandomSeed(payload.eventId);
-        if (seed == 0) revert VRFNotFulfilled();
-
-        uint256 randomAttribute = seed % 100;
+        uint256 attribute = seed % 100;
 
         minted[payload.assetId] = true;
         eventPayoutPool[payload.eventId] += payload.amount;
 
-        emit NILMinted(payload.assetId, payload.receiver, payload.amount, randomAttribute);
+        emit NILMinted(payload.assetId, payload.receiver, payload.amount, attribute);
 
-        // Emit for cross-chain (Base liquidity, Solana mint, XRPL trading, Stacks settle...)
-        BridgePayload memory emitPayload = payload;
-        emitPayload.action = "NIL_MINT";
-        emitPayload.data = abi.encode(randomAttribute);
-        bytes32 payloadHash = BridgePayloadLib.hash(emitPayload);
-        emit BridgePayloadEmitted(payloadHash, emitPayload);
+        BridgePayload memory p = payload;
+        p.action = "MINT_NIL";
+        p.data = abi.encode(attribute);
+        bytes32 h = BridgePayloadLib.hash(p);
+        emit BridgePayloadEmitted(h, p);
     }
 
-    /**
-     * @notice Execute payout (callable by AutomationKeeper after VRF fulfillment, or authorized actor).
-     *         Performs stable transfer and emits payload for downstream rails.
-     */
-    function executePayout(bytes32 eventId, address athlete, uint256 amount)
-        external
-        whenNotPaused
-        nonReentrant
-    {
-        if (amount == 0) revert("Invalid amount");
-        if (eventPayoutPool[eventId] < amount) revert InsufficientPool();
-        if (athletePayouts[eventId] != 0) revert PayoutAlreadyExecuted();
+    function executePayout(bytes32 eventId, address athlete, uint256 amount) external whenNotPaused nonReentrant {
+        require(amount > 0, "Invalid amount");
+        require(eventPayoutPool[eventId] >= amount, "Insufficient pool");
+        require(athletePayouts[eventId] == 0, "Already paid");
 
         athletePayouts[eventId] = amount;
         eventPayoutPool[eventId] -= amount;
 
         if (address(stablecoin) != address(0)) {
-            // Production note: prefer pull pattern or treasury in high-value deploys
-            stablecoin.transfer(athlete, amount);
+            stablecoin.transfer(athlete, amount); // prod: consider pull/treasury
         }
 
-        uint256 outcome = vrf.getEventRandomSeed(eventId);
-
+        uint256 outcome = vrf.eventRandomSeed(eventId);
         emit NILPayoutExecuted(eventId, athlete, amount, outcome);
 
-        BridgePayload memory payload = BridgePayload({
+        BridgePayload memory p = BridgePayload({
             version: 1,
             timestamp: block.timestamp,
-            sourceChainId: 43114,
-            destinationChainId: 8453,
+            sourceChainSelector: 0, // Avalanche
+            destChainSelector: 0,   // e.g. Base
             assetId: keccak256(abi.encodePacked("NIL", eventId)),
             eventId: eventId,
             sender: address(this),
             receiver: athlete,
             amount: amount,
-            fee: 0,
-            action: "NIL_PAYOUT",
+            action: "PAYOUT",
             data: abi.encode(outcome),
             lps1Hash: bytes32(0),
             gmiiSignature: bytes32(0)
         });
-        bytes32 payloadHash = BridgePayloadLib.hash(payload);
-        emit BridgePayloadEmitted(payloadHash, payload);
+        bytes32 h = BridgePayloadLib.hash(p);
+        emit BridgePayloadEmitted(h, p);
     }
 
-    function getPayout(bytes32 eventId) external view returns (uint256) {
-        return athletePayouts[eventId];
-    }
-
-    function getPool(bytes32 eventId) external view returns (uint256) {
-        return eventPayoutPool[eventId];
-    }
+    function getPayout(bytes32 eventId) external view returns (uint256) { return athletePayouts[eventId]; }
 
     function pause() external onlyOwner { _pause(); }
     function unpause() external onlyOwner { _unpause(); }
