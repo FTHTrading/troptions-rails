@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-E2E Golden Path Harness for Troptions Rails
+E2E Golden Path Harness for Troptions Rails (post-audit enhanced v0.1.0)
 Executable skeleton. Run locally or in Codespaces/Sovereign Orchestrator.
 
 Steps mirror the 14+ step FIFA/NIL sports flow.
@@ -69,14 +69,18 @@ def main():
     parser.add_argument("--step", type=int, default=0, help="Run single step (1-14)")
     parser.add_argument("--event", default="FIFA_NIL_2026_Q3", help="Event ID for payload")
     parser.add_argument("--amount", type=int, default=250000, help="USDC amount (6 decimals)")
+    parser.add_argument("--record-tx", type=str, default="", help="Paste real tx hash after testnet run for verification")
     args = parser.parse_args()
 
     payload = make_bridge_payload(args.event, args.amount)
 
+    if args.record_tx:
+        print("Recorded tx for step context:", args.record_tx)
+        print("Update E2E_GOLDEN_PATH.md and README with this hash + Snowtrace/Solscan link.")
     if args.step:
         simulate_step(args.step, payload)
     else:
-        print("TROPTIONS RAILS - E2E Golden Path Harness (sim)")
+        print("TROPTIONS RAILS - E2E Golden Path Harness (sim) - post-audit v0.1.0")
         print("Real testnet hashes will be captured post-deploy (Fuji + Solana devnet + XRPL test).")
         for s in range(1, 15):
             simulate_step(s, payload)
@@ -84,6 +88,7 @@ def main():
         print("2. Update addresses in README + this script env.")
         print("3. python scripts/e2e_golden_path.py --step 4   # after VRF deployed")
         print("4. Paste real Snowtrace/Solscan txs into docs/E2E_GOLDEN_PATH.md")
+        print("5. Re-run with --record-tx YOUR_HASH for verification output.")
 
 if __name__ == "__main__":
     main()

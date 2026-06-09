@@ -1,4 +1,6 @@
-**Troptions Senior-Level Contract Template Suite**
+**Troptions Senior-Level Contract Template Suite (Expanded - 33 Contracts & Tools)**
+
+**Post Full System Audit (v0.1.0) Reconciliation**: Standardized on **33 senior-grade contracts, tools, and per-rail adapters/starters**. See main CONTRACT_TEMPLATES.md (root) and docs/SYSTEM_AUDIT_REPORT.md for details and canonical list.
 
 Production-grade, audit-ready Solidity templates built specifically for the Troptions 9-rail sovereign multi-chain system (NIL rights, sports outcomes, stables, LPS-1 / XXXIII / GMIIE provenance, unified BridgePayload).
 
@@ -62,7 +64,7 @@ All components are designed to be dropped into the Sovereign Orchestrator / Comp
 - Web3 proof pinning of deployed addresses + events via Cloudflare IPFS (see contracts/web3/).
 - Sovereign Orchestrator Python agent that calls these via RPC or 1-click.
 
-See the main professional site (https://fthtrading.github.io/troptions-rails or /docs/index.html) for architecture diagrams, flow trees, investor costs, and 9-rail overview.
+See the main professional site (https://fthtrading.github.io/troptions-rails or /docs/index.html) for architecture diagrams, flow trees, investor costs, and 9-rail overview. See docs/SYSTEM_AUDIT_REPORT.md for post-audit details.
 
 All code lives under `contracts/`. Build with Foundry (`forge build`) or Hardhat. Use latest OpenZeppelin and Chainlink contracts.
 

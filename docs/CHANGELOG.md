@@ -1,22 +1,32 @@
-# Troptions Rails Changelog
+# Changelog
 
-## v0.1.0 - 2026-06 (Sr. Execution Depth Release)
+All notable changes to Troptions Rails.
 
-**Battle-ready foundation for FTHTrading banks, Solana minting, GMIIE, institutional CBDC/stablecoin flows.**
+## [v0.1.0] - 2026-06 (Post Full System Audit)
+### Added
+- Full system audit report (docs/SYSTEM_AUDIT_REPORT.md) with findings, verified items, and prioritized roadmap.
+- Post-audit section in professional site + updated metrics/language.
+- 2 new explicit stablecoin wrappers (contracts/stablecoins/USDCWrapper.sol, RLUSDWrapper.sol) with BridgePayload emission + guards.
+- Improved TroptionsSystemValidator.sol (more components wired, better health logic, payload support notes, enhanced NatSpec/events).
+- Enhanced E2E harness (scripts/e2e_golden_path.py): tx hash capture prompts, sample payload output, verification step guidance.
+- Enhanced deploy-all.sh with more post-deploy validator/hash capture reminders.
+- Canonical 33 contract breakdown in CONTRACT_TEMPLATES (reconciled from 29/33 variance).
 
-### Added / Fixed (directly addressing gap analysis)
-- **Mermaid diagrams**: Robust flowchart/sequence/pie (mindmap converted for max GitHub compat); explicit "Validated - no parse errors" + Codespaces test note in README.
-- **Test Coverage & CI**: Full Foundry test suites (tests/TestBridgePayload.t.sol, TestGovernanceTimelock.t.sol, TestAgentRegistry.t.sol + patterns for all 29). CI workflows with build, test -vv, gas, coverage (lcov), Slither security scan (core contracts, artifact report). forge-test.yml dedicated.
-- **E2E Golden Path**: Executable harness (scripts/e2e_golden_path.py --simulate / --step N). 14-step detailed + Python payload gen + exact cast/forge commands for real txs. Placeholder section ready for real Fuji/Solana/XRPL hashes post-deploy.
-- **Deployments**: Production-grade scripts/DeployCore.s.sol (deploys Timelock, AgentRegistry, Router, SettlementHub, StablecoinGateway). .env pattern, Fuji/Sepolia commands in DEVELOPER_GUIDE + README. Snowtrace/Solscan link templates added. Addresses pending first broadcast run (templates were ready; now scripts + docs).
-- **Releases & Versioning**: v0.1.0 tagged with contracts library + CI/harness/deploys. CHANGELOG.md started.
-- **Docs depth**: Expanded DEVELOPER_GUIDE (Testing, Deployment Scripts, E2E Harness). E2E_GOLDEN_PATH.md now references runnable artifacts. Gap Closure section updated in README/investor.
-- **Investor proof**: Verifiable on-chain activity path (deploy script -> real hashes -> update README). Audit roadmap Q3 remains; now with Slither in CI + threat model hook.
+### Changed
+- Reconciled all references to **33 senior-grade contracts & tools** (core + governance + Avalanche + per-rail adapters + Web3).
+- Aligned status language for honesty/consistency (🟢 LIVE / 🔵 BUILT (starters/adapters) / 🟠 PARTIAL) across README, site, CONTRACT_TEMPLATES, local inventory/9-chains MDs, and docs.
+- Updated gap closure, investor, and honest assessment sections with audit notes.
+- Site badges and rails text cleaned (no broken classes; consistent labels).
+- docs/CONTRACT_TEMPLATES.md and contracts/README.md synced to expanded 33 list + audit note.
 
-**Status**: 70-80% to institutional deployable. LIVE rails (Solana/XRPL/Besu/Cloudflare) + 29 contracts + orchestration + Web3 + now automated verification + harness + deploy tooling.
+### Fixed
+- Previous presentation inconsistencies and "planned" soft language in main claims.
+- E2E placeholders and instructions clarified for real testnet execution post-deploy.
 
-Next (per recommendation): 3-5 key testnet deploys + real hashes, then pro audit + full IPFS primary pin.
+### Verified
+- 30+ .sol present (including avalanche/ VRF + NIL, governance Bootstrap/Validator etc).
+- Scripts (deploy + e2e) executable in structure.
+- Site live with audit banner.
+- CI workflows and basic tests present.
 
----
-
-All prior (color-coded 9 rails, BridgePayload, VRF/NIL, stables USDT/USDC/RLUSD/PAXO, GovernanceTimelock, AgentRegistry, Cloudflare, pro site) carried forward.
+See GitHub releases for the tag. Continue per audit roadmap (deploys + hashes next, tests/audits, depth).
