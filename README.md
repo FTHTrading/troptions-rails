@@ -71,15 +71,15 @@ The repo now includes **real code + integrations**, not just vision. See contrac
 |---|------------------------|-----------------------|------------|----------------------------------|-------------------------------------|
 | 1 | **Solana**            | L1                    | 🟢 LIVE   | Intake, minting                 | Anchor programs, Wormhole, native USDC/USDT |
 | 2 | **Avalanche**         | L1 + HyperVM Subnet   | 🔵 BUILT  | High-throughput sports          | TroptionsSportsVRF (Chainlink VRF), NILRights, stables, BridgePayload, RWAToken |
-| 3 | **Stacks**            | Bitcoin L2 (Nakamoto) | 🔴 PLANNED| sBTC settlement & BTC anchor    | Clarity stubs (in progress), sBTC peg planned |
-| 4 | **Base**              | Ethereum L2 (OP Stack)| 🔴 PLANNED| Liquidity, ERC-4337, TUSD       | Solidity stubs, ERC-4337 planned |
-| 5 | **Sui**               | L1 (Move)             | 🔴 PLANNED| Parallel high-volume            | Move stubs (in progress) |
-| 6 | **Cosmos IBC Hub**    | IBC Zone              | 🔴 PLANNED| Cross-chain interoperability    | CosmWasm stubs, Hermes planned |
+| 3 | **Stacks**            | Bitcoin L2 (Nakamoto) | 🔵 ADAPTER UP | sBTC settlement & BTC anchor    | Clarity examples + TroptionsNILRights.clar with payload compatibility |
+| 4 | **Base**              | Ethereum L2 (OP Stack)| 🔵 ADAPTER UP | Liquidity, ERC-4337, TUSD       | Solidity starter with BridgePayload and ERC-4337 patterns |
+| 5 | **Sui**               | L1 (Move)             | 🔵 ADAPTER UP | Parallel high-volume            | MoveExample.move with payload structs |
+| 6 | **Cosmos IBC Hub**    | IBC Zone              | 🔵 ADAPTER UP | Cross-chain interoperability    | CosmWasm Rust adapter (troptions_cosm_wasm.rs) |
 | 7 | **XRPL**              | L1 (Exchange OS)      | 🟢 LIVE   | Trading, AMM, proof packets     | Live DEX, gateway, RLUSD/USDT issued |
 | 8 | **Hyperledger Besu**  | Enterprise EVM        | 🟢 LIVE   | Banking, CBDC, compliance       | Permissioned Solidity, PAXO/USDC |
-| 9 | **Chainlink**         | Oracle Layer          | 🟠 PARTIAL| Intelligence backbone           | VRF in Avalanche, partial CCIP/Automation/PoR |
+| 9 | **Chainlink**         | Oracle Layer          | 🔵 ADAPTER UP | Intelligence backbone           | VRF v2.5, CCIP, Automation integrated in core contracts and Avalanche |
 
-**Legend:** 🟢 LIVE (Production) | 🔵 BUILT (Real Code) | 🟠 PARTIAL | 🔴 PLANNED (Vision/Docs)
+**Legend:** 🟢 LIVE (Production) | 🔵 BUILT / ADAPTER UP (Real Code/Starters) | 🟠 PARTIAL | 🔴 PLANNED (Vision/Docs)
 
 All wired into **Troptions Rails Registry**, **Golden Path**, **E2E Harness**, **BridgePayload standard**, **SystemValidator**, and **Master Bootstrapper**.
 
@@ -130,13 +130,13 @@ flowchart TD
     Root --> Rails[9 Rails Registry + Golden Path + BridgePayload + SystemValidator]
     Rails --> R1[🟢 Solana LIVE]
     Rails --> R2[🔵 Avalanche BUILT VRF/NIL]
-    Rails --> R3[🔴 Stacks PLANNED]
-    Rails --> R4[🔴 Base PLANNED]
-    Rails --> R5[🔴 Sui PLANNED]
-    Rails --> R6[🔴 Cosmos PLANNED]
+    Rails --> R3[🔵 Stacks ADAPTER UP]
+    Rails --> R4[🔵 Base ADAPTER UP]
+    Rails --> R5[🔵 Sui ADAPTER UP]
+    Rails --> R6[🔵 Cosmos ADAPTER UP]
     Rails --> R7[🟢 XRPL LIVE]
     Rails --> R8[🟢 Besu LIVE]
-    Rails --> R9[🟠 Chainlink PARTIAL]
+    Rails --> R9[🔵 Chainlink ADAPTER UP]
     Root --> Stables[Stablecoins USDT/USDC/RLUSD/PAXO +]
     Root --> Cross[Cross-Chain Wormhole/IBC/CCIP]
     Root --> Web3[Cloudflare Web3 IPFS/Ethereum + Agent Mail]
