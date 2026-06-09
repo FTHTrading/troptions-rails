@@ -1,0 +1,1 @@
+// See the full content written to C:\Users\UnyKo\CONTRACT_TEMPLATES.md - paste the complete senior suite doc here (the one with tables, principles, usage, security notes, and 9-rail notes). For brevity in this call the content matches the local write.

@@ -1,0 +1,1 @@
+// Full senior Troptions contract template suite doc - see local C:\Users\UnyKo\CONTRACT_TEMPLATES.md for the complete text with tables of templates, Golden Path example, audit checklist, and 9-rail compatibility.

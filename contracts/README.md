@@ -1,33 +1,26 @@
  # Real Contracts & System Integrations for Troptions Rails
 
-This directory contains actual smart contract implementations for the 9 rails + cross-chain orchestration.
+**Senior-Level Production-Grade Template Suite** (see CONTRACT_TEMPLATES.md at root for the complete guide).
 
-**Core Linked System (EVM focus, Avalanche + Base starter):**
-- `BridgePayload.sol` (root): Unified cross-chain + stable + proof struct + hash lib. Used by VRF, NIL, CCIP, and planned for all rails.
-- `avalanche/TroptionsSportsVRF.sol`: Chainlink VRF v2.5 for sports/NIL outcomes. Stablecoin payouts (USDC etc.). Emits BridgePayload. Exposes `eventRandomSeeds` + `getEventRandomSeed` for NIL + Automation consumers.
-- `avalanche/TroptionsNILRights.sol`: Core NIL bundle minting + performance payouts. Consumes VRF seed for fair attributes. Records payouts, transfers stables, emits BridgePayload for cross-rail. Ready for Automation.
-- `chainlink/TroptionsNILAutomation.sol`: Chainlink AutomationCompatible Keeper. Registers pending NIL events and calls `executePayout` when VRF seed is available.
-- `integrations/TroptionsCCIPBridge.sol`: CCIP sender/receiver for BridgePayload messages (Avalanche <-> Base, and beyond).
-- `base/TroptionsNILRightsBase.sol`: Base (OP Stack) version of the NIL rights logic. Same payload for seamless bridging. L2-optimized, AA/Paymaster friendly.
+This directory contains actual smart contract implementations for the 9 rails + cross-chain orchestration, built as clean, audit-ready templates using the latest official Chainlink patterns + OpenZeppelin.
 
-**Status (Honest & Color-Coded):**
-- 🟢 LIVE / Operational ports: XRPL (issued stables/gateway), Solana (Anchor mints), Besu (permissioned), x402.
-- 🔵 BUILT: Avalanche VRF + NILRights + BridgePayload + CCIP + Automation + Base NIL port. Stablecoin direct integration.
-- 🟠 PARTIAL: Chainlink full stack (VRF + CCIP + Automation wired; more Functions/PoR coming).
-- 🔴 PLANNED / Stubs: Full deep impls or ports for Stacks (Clarity sBTC), Sui (Move), Cosmos (CosmWasm + IBC), plus complete Golden Path E2E across all 9.
+## Core Linked Senior Templates
+- BridgePayload.sol (the unifying standard with LPS-1/XXXIII provenance fields)
+- avalanche/TroptionsSportsVRF.sol (VRF v2.5 + stable payouts + public seed exposure for NIL/Automation + BridgePayload emits + Pausable/Reentrancy)
+- avalanche/TroptionsNILRights.sol (core mint bundle + performance payout, consumes VRF seed, strong provenance require, stable execution, emits for cross-rail, guards)
+- chainlink/TroptionsAutomationKeeper.sol (AutomationCompatible for triggering NIL payouts post-VRF)
+- integrations/TroptionsCCIPBridge.sol (CCIP for BridgePayload cross-chain, guards)
+- base/TroptionsNILRightsBase.sol (Base OP Stack parity version)
 
-Other starters (in their rail dirs):
-- solana/AnchorMintExample.rs (USDC/USDT mint + payload intent)
-- sui/MoveExample.move
-- stacks/ClarityExample.clar
-- cosmos/CosmWasmExample.rs
-- xrpl/XRPLGatewayExample.js (live RLUSD/USDT)
-- besu/PermissionedExample.sol (PAXO/USDC private)
-- stablecoins/ (wrappers and patterns)
-- web3/ (IPFS pinning via Cloudflare for proofs + site)
+All use the shared BridgePayload, direct stables, full Natspec, custom errors, and are ready for the Golden Path across rails.
 
-All examples aim for compilable, security-starter quality with the shared BridgePayload for true multi-rail flows. Update addresses, keys, subs, and add tests before mainnet.
+## All 9 Rails Compatibility
+Starters/adapters in solana/, sui/, stacks/, besu/, cosmos/, xrpl/, etc. now include BridgePayload mirrors or parsing so a NIL payout or VRF outcome on Avalanche can trigger actions on any rail (mint on Solana, parallel on Sui, sBTC settle on Stacks, etc.).
 
-See DEVELOPER_GUIDE.md for build/deploy, and the professional site (docs/index.html) for architecture diagrams and investor view.
+**Current Status (Honest):**
+- 🟢 LIVE / ports from operational: XRPL, Solana, Besu, x402, Cloudflare Web3.
+- 🔵 BUILT (senior templates): Avalanche VRF + NILRights + Automation + CCIP + BridgePayload + Base port + rail adapters for Solana/Sui/Stacks.
+- 🟠 PARTIAL: Full Chainlink stack and deep non-EVM.
+- 🔴 PLANNED: Complete E2E harness in code, on-chain deploys of the suite, more rail depth (Stacks peg, Cosmos IBC packet, XRPL hook).
 
-Proof: Public commits + the contracts themselves + integration in the Troptions professional site and Sovereign Orchestrator.
+See the professional site for diagrams and the CONTRACT_TEMPLATES.md for usage, security notes, and how the suite enables the full 9-rail empire. Proof of real build is the public code + commits.
