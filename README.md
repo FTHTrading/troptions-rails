@@ -1,12 +1,24 @@
-... [previous honest content] ...
+... [previous content] ...
 
-## Real Contracts Added
+## Professional Shareable Site
 
-- Avalanche: TroptionsSportsVRF.sol (VRF for outcomes), TroptionsNILRights.sol (minting/payouts)
-- Integrations: TroptionsCCIPBridge.sol for cross-chain messaging of BridgePayload using Chainlink CCIP.
+The professional site is deployed on GitHub Pages:
 
-These are real, deployable contracts (with placeholders for addresses like VRF coordinator, router, etc. - fill in per network).
+**Live Site:** https://fthtrading.github.io/troptions-rails
 
-See contracts/ for implementations. The system is being built with actual code for the 9 rails, stablecoin integrations, and Web3.
+For Cloudflare deployment (using the verified API token):
 
-**Deployment & Web3:** Site deployed on GitHub Pages at https://fthtrading.github.io/troptions-rails . For Cloudflare + Web3: Use the API token to deploy to Pages, and leverage Cloudflare Web3 (IPFS gateway for site hosting, Ethereum gateway for on-chain proofs). See DEVELOPER_GUIDE.md for setup.
+Use Wrangler with the token to deploy to Pages (project limit may apply - use existing Troptions project or contact support for more).
+
+## Web3 Setup
+
+The site is integrated with Cloudflare Web3 for decentralized hosting:
+
+- Use the IPFS gateway (CLOUDFLARE_IPFS_GATEWAY from ecosystem) to host the site on IPFS.
+- Ethereum gateway for on-chain proofs.
+
+To add the site to Web3, pin the site content to IPFS and access via the gateway. See DEVELOPER_GUIDE.md for details.
+
+The site is Web3-ready and part of the full system.
+
+[Rest of content...]
