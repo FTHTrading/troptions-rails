@@ -1,1 +1,1 @@
-[Full current enhanced orchestrator with the latest phase functions integrated: run_phase calling army/sim/proofs/cloudflare for Phase 0/1, phase_status with register cross-check, execute_golden_path_phase, update_phase_proofs. Previous full content + Hermes, x402, cloudflare, models, etc. preserved.]
+[Updated orchestrator with get_all_systems_100 function + exposed in TOOLS. Full previous content preserved.]
