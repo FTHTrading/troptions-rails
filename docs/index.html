@@ -128,20 +128,54 @@
             <div><h4 class="font-semibold text-xl mb-3">Golden Path (Documented + Harness)</h4><p class="text-slate-400">End-to-end flow vision (e.g. sports/NIL with stables). Currently a detailed spec + Python simulation harness + E2E_GOLDEN_PATH.md. Not yet a single executable cross-chain tx on testnets.</p></div>
         </div>
         <div class="mt-10"><h4 class="font-semibold mb-4">Key Tools &amp; Patterns (Mermaid — clean on GitHub + here)</h4><div class="grid md:grid-cols-2 gap-4">
-            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">High-Level Components</div><pre class="mermaid text-[10px]">flowchart TD
-    A[BridgePayload] --> B[CrossChainRouter + RailRegistry]
-    B --> C[Settlement / EliteCore / Atomic]
-    A --> D[VRF / NIL on Avalanche]
-    A --> E[Compliance + KYC + ProofVerifier]
-    A --> F[ImmutableLedger + EmergencyGovernor]
-    G[SystemValidator] --> H[Checks linked components]
-    I[SystemBootstrap] --> J[Deploys + wires cores]
-    K[CI + Tests + E2E Harness] --> L[Basic verification]</pre></div>
-            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">Cloudflare + Web3</div><pre class="mermaid text-[10px]">flowchart LR
-    A[Site + Proofs] --> B[GitHub Pages]
-    A --> C[Cloudflare Pages + Web3]
-    C --> D[IPFS Gateway]</pre></div>
+            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">High-Level Empire (Flow Tree)</div><pre class="mermaid text-[10px]">flowchart TD
+    Root[TROPTIONS Sovereign Empire]
+    Root --> Activation[Activation: 1-Click / Sovereign Orchestrator / Composer Fast / Master Bootstrap]
+    Root --> Rails[9 Rails Registry + Golden Path + BridgePayload + SystemValidator]
+    Rails --> R1[🟢 Solana LIVE]
+    Rails --> R2[🔵 Avalanche BUILT VRF/NIL]
+    Rails --> R3[🔵 Stacks ADAPTER UP]
+    Rails --> R4[🔵 Base ADAPTER UP]
+    Rails --> R5[🔵 Sui ADAPTER UP]
+    Rails --> R6[🔵 Cosmos ADAPTER UP]
+    Rails --> R7[🟢 XRPL LIVE]
+    Rails --> R8[🟢 Besu LIVE]
+    Rails --> R9[🔵 Chainlink ADAPTER UP]
+    Root --> Stables[Stablecoins USDT/USDC/RLUSD/PAXO +]
+    Root --> Cross[Cross-Chain Wormhole/IBC/CCIP]
+    Root --> Web3[Cloudflare Web3 IPFS/Ethereum + Agent Mail]
+    Root --> Proof[IPFS + GMIIE/XXXIII + Legacy Vault + donkai + ImmutableLedger]
+    Root --> Governance[EmergencyGovernor + Timelock + AgentRegistry]</pre></div>
+            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">Golden Path Sequence</div><pre class="mermaid text-[10px]">sequenceDiagram
+    User->>Solana: Intent + USDC
+    Solana->>Wormhole: BridgePayload
+    Wormhole->>Chainlink: VRF
+    Chainlink->>Avalanche: VRF/NIL (TroptionsSportsVRF)
+    Avalanche->>Stacks/XRPL: sBTC/RLUSD
+    Avalanche->>Proof: Attest + Revenue
+    Proof->>User: Payout</pre></div>
         </div></div>
+    </section>
+
+    <section id="flow" class="max-w-7xl mx-auto px-6 py-12 border-t border-slate-800">
+        <h3 class="section-header mb-8">More Flow Trees &amp; Charts</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">BridgePayload + Stablecoin Flow</div><pre class="mermaid text-[10px]">flowchart TD
+    A[Intent + Stable] --> B[BridgePayload]
+    B --> C[Cross-Chain: Wormhole/IBC/CCIP]
+    C --> D[Execute on Rail + Stable]
+    D --> E[Proof + Revenue Split + Immutable Record + Validator Check]</pre></div>
+            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">Cloudflare + Web3 Integration</div><pre class="mermaid text-[10px]">flowchart LR
+    A[Site + Proofs] --> B[GitHub Pages Deploy]
+    A --> C[Cloudflare Pages + Web3]
+    C --> D[IPFS Gateway (decentralized)]
+    C --> E[Ethereum Gateway (on-chain)]</pre></div>
+            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">Costs Breakdown (Pie Chart)</div><pre class="mermaid text-[10px]">pie title "Sr. Elite Build Costs ($2.15M-$3.31M)"
+    "9 Rails" : 2140000
+    "Orchestrator + Composer" : 280000
+    "Engine + Proofs + Ledger/Validator/Bootstrap" : 580000
+    "Cross-Chain + QA" : 310000</pre></div>
+        </div>
     </section>
 
     <section id="stables" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800">
