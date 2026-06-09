@@ -1,16 +1,13 @@
  # Real Contracts & System Integrations for Troptions Rails
 
-**Senior-Level Production-Grade Template Suite (Expanded - 17+ Contracts, All Systems)**
+**Senior-Level Production-Grade Template Suite (Expanded - 19 Contracts, All Systems)**
 
-See CONTRACT_TEMPLATES.md (root) for the full guide.
+... (previous) ...
 
-**Core EVM/Settlement:** [list previous + EliteSettlementCore, etc.]
+**Native Adapters (continued):**
+- contracts/cosmos/troptions_cosm_wasm.rs
+- contracts/xrpl/xrpl_gateway.js
 
-**Native Adapters for Remaining Rails:**
-- contracts/stacks/TroptionsNILRights.clar
-- contracts/solana/programs/troptions/src/lib.rs
-- contracts/sui/sources/troptions.move
+All systems integrated with BridgePayload concept. Honest status: 🔵 BUILT for core + adapters across all 9+ rails.
 
-All integrated with BridgePayload (or equiv), stables, LPS-1. Honest status: 🔵 BUILT for core + these adapters; focused on 6-7 core rails + full 9+ vision.
-
-The activate.sh now references the full multi-chain suite for 1-click with Sovereign Orchestrator.
+The activate.sh now references the full multi-chain suite.
