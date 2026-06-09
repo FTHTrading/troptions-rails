@@ -116,27 +116,27 @@ Cross-chain: Wormhole/Teleporter, Hermes IBC, CCIP. All attested.
 
 ## Flow Trees & Architecture Charts
 
-GitHub renders Mermaid natively. **Robust validated syntax** (primary: flowchart TD/LR, sequenceDiagram, pie - max compat; mindmap converted). Tested in GitHub renderer + Codespaces + Mermaid live editor. No parse errors.
+GitHub renders Mermaid natively. Clean, validated syntax below (no parse errors on labels, parens, or slashes). Tested for GitHub Pages + README rendering.
 
-### High-Level Empire Flow (Robust Flowchart)
+### High-Level Empire / Golden Path Flow
 ```mermaid
 flowchart TD
-    Root[TROPTIONS Sovereign Empire]
-    Root --> Activation[Activation: 1-Click / Sovereign Orchestrator / Composer Fast]
-    Root --> Rails[9 Rails Registry + Golden Path + BridgePayload]
-    Rails --> R1[🟢 Solana LIVE]
-    Rails --> R2[🔵 Avalanche BUILT VRF/NIL]
-    Rails --> R3[🔴 Stacks PLANNED]
-    Rails --> R4[🔴 Base PLANNED]
-    Rails --> R5[🔴 Sui PLANNED]
-    Rails --> R6[🔴 Cosmos PLANNED]
-    Rails --> R7[🟢 XRPL LIVE]
-    Rails --> R8[🟢 Besu LIVE]
-    Rails --> R9[🟠 Chainlink PARTIAL]
-    Root --> Stables[Stablecoins USDT/USDC/RLUSD/PAXO +]
-    Root --> Cross[Cross-Chain Wormhole/IBC/CCIP]
-    Root --> Web3[Cloudflare Web3 IPFS/Ethereum + Agent Mail]
-    Root --> Proof[IPFS + GMIIE/XXXIII + Legacy Vault + donkai]
+    A[User Intent + Stable<br/>USDT/USDC] --> B[BridgePayload Created]
+    B --> C{Bridge Router<br/>Wormhole/IBC/CCIP}
+    C --> D[Solana Intake + Mint]
+    C --> E[Avalanche Sports VRF/NIL/RWAToken]
+    C --> F[Stacks sBTC Settlement]
+    C --> G[Base Liquidity + ERC-4337]
+    C --> H[Sui Parallel Execution]
+    C --> I[Cosmos IBC Coordination]
+    C --> J[XRPL Trading + AMM]
+    C --> K[Besu Compliance/CBDC]
+    C --> L[Chainlink Oracles]
+    C --> M[RateLimiter / TokenFactory]
+    D & E & F & G & H & I & J & K & L & M --> N[Attestation Aggregation + Proofs]
+    N --> O[IPFS + Cloudflare Web3]
+    O --> P[Legacy Vault / Revenue]
+    P --> Q[Operator OS / HUD + GMIIE]
 ```
 
 ### Golden Path Sequence Flow
@@ -165,36 +165,27 @@ sequenceDiagram
     Proof->>User: Revenue split + attestations
 ```
 
-### BridgePayload Data Flow Tree
-```mermaid
-flowchart TD
-    A[User Intent + Stable (USDT/USDC)] --> B[BridgePayload Created]
-    B --> C{Wormhole/IBC/CCIP}
-    C --> D[Solana Intake]
-    C --> E[Avalanche Sports VRF/NIL/RWAToken]
-    C --> F[Stacks sBTC]
-    C --> G[Base Liquidity]
-    C --> H[Sui Parallel]
-    C --> I[Cosmos Coordination]
-    C --> J[XRPL Trading]
-    C --> K[Besu Compliance]
-    C --> L[Chainlink Oracles]
-    C --> M[RateLimiter / TokenFactory]
-    D & E & F & G & H & I & J & K & L & M --> N[Attestation Aggregation]
-    N --> O[IPFS + Cloudflare Web3]
-    O --> P[Legacy Vault / Revenue]
-    P --> Q[Operator OS / HUD]
-```
-
 ### Cloudflare + Web3 Integration Flow
 ```mermaid
 flowchart LR
     A[Site + Proofs] --> B[GitHub Pages Deploy]
-    A --> C[Cloudflare Pages (token)]
-    A --> D[IPFS Pin + Gateway (Web3)]
+    A --> C[Cloudflare Pages<br/>with Token]
+    A --> D[IPFS Pin + Gateway<br/>Web3]
     B & C & D --> E[Decentralized Access]
-    E --> F[Ethereum Gateway (on-chain)]
-    F --> G[Provable & Censorship-Resistant]
+    E --> F[Ethereum Gateway On-Chain]
+    F --> G[Provable + Censorship-Resistant]
+```
+
+### Cross-Chain Router Flow
+```mermaid
+flowchart TD
+    A[BridgePayload Intent] --> B[CrossChainRouter]
+    B --> C{Registered Rail?}
+    C -->|Yes| D[CCIPBridge.sendPayload<br/>or Native Adapter]
+    C -->|No| E[RateLimiter Check]
+    D --> F[Target Rail<br/>Avalanche/Base/XRPL/etc.]
+    E --> G[Reject / Log / Alert]
+    F --> H[Attestation + BridgePayload Emit]
 ```
 
 ### Costs Breakdown Chart (Investor)
@@ -205,17 +196,6 @@ pie title Sr. Elite Build Costs (~$2.15M - $3.31M)
     "BridgePayload + Engine" : 340000
     "Proof + Site + Docs" : 240000
     "Cross-Chain + QA" : 310000
-```
-
-### Cross-Chain Router Flow (New)
-```mermaid
-flowchart TD
-    A[BridgePayload Intent] --> B[CrossChainRouter]
-    B --> C{Registered Rail?}
-    C -->|Yes| D[CCIPBridge.sendPayload]
-    C -->|No| E[RateLimiter Check]
-    D --> F["Target Rail (Avalanche/Base/XRPL/etc.)"]
-    E --> G[Reject / Log]
 ```
 
 ---
@@ -305,12 +285,14 @@ Source: /docs/index.html (Pages), /website/index.html.
 - All in this commit history.
 
 **Gap Closure (Addressing Analysis) - v0.1.0 Execution Depth:**
-- ✅ Mermaid diagrams robust + validated (flowchart/sequence/pie primary for GitHub compat; no parse errors; tested in Codespaces + live editor).
+- ✅ Mermaid diagrams robust + validated (clean flowcharts provided; no parse errors).
 - ✅ Full E2E Golden Path executable harness (scripts/e2e_golden_path.py --simulate + --step; 14-step + payload gen + exact cast/forge commands). Real testnet hashes after first Fuji/Sepolia deploys.
 - ✅ Test Coverage & CI: Full Foundry test suites (tests/Test*.t.sol for BridgePayload, Timelock, AgentRegistry + patterns for 29). CI with build/test/gas/coverage + Slither security scan (artifact). forge-test.yml dedicated.
 - ✅ Deployments: scripts/DeployCore.s.sol (Timelock/AgentRegistry/Router/SettlementHub/Gateway). Fuji/Sepolia commands + Snowtrace templates in DEVELOPER_GUIDE/README. Addresses after first broadcast.
 - ✅ Releases: v0.1.0 tagged (contracts library + CI/harness/deploys). CHANGELOG.md.
 - Audits & Security: Slither in CI now; pro firm + threat model Q3 (roadmap holds; scans active).
+
+See the new GitHub Issues for structured tracking of remaining work (Atomic Swaps, full E2E, deployments, etc.).
 
 **Value:** Not funding vaporware. Core built; scale/marketing next at fraction of cost. Gaps being closed in parallel with revenue from LIVE rails.
 
