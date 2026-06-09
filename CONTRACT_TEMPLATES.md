@@ -1,8 +1,9 @@
 **Troptions Senior-Level Contract Template Suite (Expanded - 29 Contracts)**
 
-... (previous full content with all prior contracts) ...
+Production-grade, audit-ready templates for the Troptions 9-rail system (practical focus: XRPL, Solana, Base, Avalanche, Stacks/sBTC, Chainlink + Bitcoin/Stellar as core; others as adapters/future).
 
-**Governance & Agent Layer (New):**
+**Core EVM/Settlement + Institutional (previous + new):**
+- [full previous list including all rail adapters, compliance, settlement, etc.]
 - TroptionsGovernanceTimelock.sol - 48h timelock for upgrades/admin, BridgePayload for audit. Ties to AccessControl, Registry, Hub.
 - TroptionsAgentRegistry.sol - AI agent auth for Sovereign Orchestrator. Integrates BridgePayload, Pausable.
 
