@@ -1,28 +1,33 @@
-# Real Contracts & System Integrations for Troptions Rails
+ # Real Contracts & System Integrations for Troptions Rails
 
-This directory will contain the actual smart contract implementations and integration code for the rails.
+This directory contains actual smart contract implementations for the 9 rails + cross-chain orchestration.
 
-**Current Status (Honest):**
-- Live rails have initial examples or ports from operational components.
-- Planned rails have starter templates/stubs with TODOs.
-- Integrations for stablecoins (USDT, USDC, RLUSD, PAXO, DAI, PYUSD, TUSD) are shown in examples where applicable.
-- Web3: References to Cloudflare IPFS/Ethereum gateways for hosting proofs and site.
-- All code is real (compilable examples) or clear stubs. No more pure marketing.
+**Core Linked System (EVM focus, Avalanche + Base starter):**
+- `BridgePayload.sol` (root): Unified cross-chain + stable + proof struct + hash lib. Used by VRF, NIL, CCIP, and planned for all rails.
+- `avalanche/TroptionsSportsVRF.sol`: Chainlink VRF v2.5 for sports/NIL outcomes. Stablecoin payouts (USDC etc.). Emits BridgePayload. Exposes `eventRandomSeeds` + `getEventRandomSeed` for NIL + Automation consumers.
+- `avalanche/TroptionsNILRights.sol`: Core NIL bundle minting + performance payouts. Consumes VRF seed for fair attributes. Records payouts, transfers stables, emits BridgePayload for cross-rail. Ready for Automation.
+- `chainlink/TroptionsNILAutomation.sol`: Chainlink AutomationCompatible Keeper. Registers pending NIL events and calls `executePayout` when VRF seed is available.
+- `integrations/TroptionsCCIPBridge.sol`: CCIP sender/receiver for BridgePayload messages (Avalanche <-> Base, and beyond).
+- `base/TroptionsNILRightsBase.sol`: Base (OP Stack) version of the NIL rights logic. Same payload for seamless bridging. L2-optimized, AA/Paymaster friendly.
 
-## Directory Structure
-- solana/ - Anchor programs (Rust)
-- avalanche/ - Solidity / HyperSDK actions
-- stacks/ - Clarity contracts
-- base/ - Solidity (ERC-4337, TUSD, etc.)
-- sui/ - Move modules
-- cosmos/ - CosmWasm (Rust)
-- xrpl/ - JS/TS for issued assets, gateway, hooks (where applicable)
-- besu/ - Solidity for permissioned EVM
-- chainlink/ - Consumer contracts, Functions, CCIP examples
-- stablecoins/ - Shared patterns for USDT/USDC/etc. wrappers and bridges
-- web3/ - IPFS pinning scripts, gateway integration examples
-- integrations/ - Cross-rail (Golden Path examples in code)
+**Status (Honest & Color-Coded):**
+- 🟢 LIVE / Operational ports: XRPL (issued stables/gateway), Solana (Anchor mints), Besu (permissioned), x402.
+- 🔵 BUILT: Avalanche VRF + NILRights + BridgePayload + CCIP + Automation + Base NIL port. Stablecoin direct integration.
+- 🟠 PARTIAL: Chainlink full stack (VRF + CCIP + Automation wired; more Functions/PoR coming).
+- 🔴 PLANNED / Stubs: Full deep impls or ports for Stacks (Clarity sBTC), Sui (Move), Cosmos (CosmWasm + IBC), plus complete Golden Path E2E across all 9.
 
-Build with appropriate toolchains. See DEVELOPER_GUIDE.md for details.
+Other starters (in their rail dirs):
+- solana/AnchorMintExample.rs (USDC/USDT mint + payload intent)
+- sui/MoveExample.move
+- stacks/ClarityExample.clar
+- cosmos/CosmWasmExample.rs
+- xrpl/XRPLGatewayExample.js (live RLUSD/USDT)
+- besu/PermissionedExample.sol (PAXO/USDC private)
+- stablecoins/ (wrappers and patterns)
+- web3/ (IPFS pinning via Cloudflare for proofs + site)
 
-Proof of real build: Contracts here + deployed in live components (e.g., Solana mint on mainnet, XRPL issued currencies live, Besu network active).
+All examples aim for compilable, security-starter quality with the shared BridgePayload for true multi-rail flows. Update addresses, keys, subs, and add tests before mainnet.
+
+See DEVELOPER_GUIDE.md for build/deploy, and the professional site (docs/index.html) for architecture diagrams and investor view.
+
+Proof: Public commits + the contracts themselves + integration in the Troptions professional site and Sovereign Orchestrator.

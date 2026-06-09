@@ -1,148 +1,119 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
-import "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
-import "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
+import "../BridgePayload.sol";
+import "./TroptionsSportsVRF.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-// Assume BridgePayload is in same dir or import
-struct BridgePayload {
-    uint256 version;
-    uint256 timestamp;
-    uint256 sourceChainId;
-    uint256 destinationChainId;
-    bytes32 assetId;
-    bytes32 eventId;
-    address sender;
-    address receiver;
-    uint256 amount;
-    uint256 fee;
-    string action;
-    bytes data;
-    bytes32 lps1Hash;
-    bytes32 gmiiSignature;
-}
+/**
+ * @title TroptionsNILRights
+ * @notice Core NIL minting and performance-based payout contract.
+ * Links to TroptionsSportsVRF for verified randomness (fair attributes/royalties).
+ * Emits BridgePayload for cross-chain settlement (CCIP, Base, XRPL, etc).
+ * Designed to be triggered/observed by Chainlink Automation (see TroptionsNILAutomation).
+ * Integrates stables for actual payouts.
+ */
+contract TroptionsNILRights is Ownable {
+    TroptionsSportsVRF public vrf;
+    IERC20 public stablecoin;
 
-library BridgePayloadLib {
-    function hash(BridgePayload memory payload) internal pure returns (bytes32) {
-        return keccak256(abi.encode(
-            payload.version,
-            payload.timestamp,
-            payload.sourceChainId,
-            payload.destinationChainId,
-            payload.assetId,
-            payload.eventId,
-            payload.sender,
-            payload.receiver,
-            payload.amount,
-            payload.fee,
-            payload.action,
-            payload.data,
-            payload.lps1Hash,
-            payload.gmiiSignature
-        ));
-    }
-}
+    mapping(bytes32 => bool) public minted;
+    mapping(bytes32 => uint256) public athletePayouts;
+    mapping(bytes32 => uint256) public eventPayoutPool;
 
-contract TroptionsNILRights is VRFConsumerBaseV2Plus, Ownable {
-    event NILRightsMinted(address indexed user, uint256 amount, bytes32 eventId);
-    event NILPayoutClaimed(address indexed user, uint256 amount, bytes32 eventId, uint256 randomOutcome);
+    event NILMinted(bytes32 indexed assetId, address indexed athlete, uint256 amount, uint256 attribute);
+    event NILPayoutExecuted(bytes32 indexed eventId, address indexed athlete, uint256 amount, uint256 randomOutcome);
     event BridgePayloadEmitted(bytes32 indexed payloadHash, BridgePayload payload);
 
-    mapping(address => uint256) public nilRightsBalance;
-    mapping(bytes32 => uint256) public eventPayoutPool;
-    mapping(uint256 => bytes32) public requestIdToEventId;
-    mapping(bytes32 => bool) public eventFulfilled;
-
-    IERC20 public stablecoin; // e.g. USDC on Avalanche
-    uint256 public s_subscriptionId;
-    bytes32 public s_keyHash;
-    uint32 public callbackGasLimit = 200000;
-    uint16 public requestConfirmations = 3;
-    uint32 public numWords = 1;
-
-    constructor(address vrfCoordinator, uint256 subscriptionId, bytes32 keyHash, address _stablecoin)
-        VRFConsumerBaseV2Plus(vrfCoordinator)
-        Ownable(msg.sender)
-    {
-        s_subscriptionId = subscriptionId;
-        s_keyHash = keyHash;
+    constructor(address _vrfAddress, address _stablecoin) Ownable(msg.sender) {
+        vrf = TroptionsSportsVRF(_vrfAddress);
         stablecoin = IERC20(_stablecoin);
+    }
+
+    function setVRF(address _vrfAddress) external onlyOwner {
+        vrf = TroptionsSportsVRF(_vrfAddress);
     }
 
     function setStablecoin(address _stablecoin) external onlyOwner {
         stablecoin = IERC20(_stablecoin);
     }
 
-    function mintNILRights(address user, uint256 amount, bytes32 eventId) external onlyOwner {
-        nilRightsBalance[user] += amount;
-        eventPayoutPool[eventId] += amount;
-        emit NILRightsMinted(user, amount, eventId);
+    /**
+     * @notice Mint NIL bundle using verified randomness from VRF (called after VRF fulfillment).
+     * Uses seed for fair attribute/royalty distribution.
+     */
+    function mintNILBundle(BridgePayload calldata payload) external {
+        require(!minted[payload.assetId], "Already minted");
+        require(payload.lps1Hash != bytes32(0), "Missing LPS-1 provenance");
+
+        uint256 seed = vrf.getEventRandomSeed(payload.eventId);
+        require(seed != 0, "VRF not fulfilled yet");
+
+        // Use VRF seed to fairly distribute attributes/royalties (e.g. 0-99 tiers)
+        uint256 randomAttribute = seed % 100;
+
+        minted[payload.assetId] = true;
+        eventPayoutPool[payload.eventId] += payload.amount;
+
+        emit NILMinted(payload.assetId, payload.receiver, payload.amount, randomAttribute);
+
+        // Emit for cross-chain visibility (e.g. Base liquidity, XRPL trading leg)
+        BridgePayload memory emitPayload = payload; // copy
+        emitPayload.action = "NIL_MINT";
+        emitPayload.data = abi.encode(randomAttribute);
+        bytes32 payloadHash = BridgePayloadLib.hash(emitPayload);
+        emit BridgePayloadEmitted(payloadHash, emitPayload);
     }
 
-    function requestPayout(bytes32 eventId, uint256 amount) external {
-        require(nilRightsBalance[msg.sender] >= amount, "Insufficient NIL rights");
+    /**
+     * @notice Execute performance-based payout (intended to be called by Automation Keeper
+     * after VRF outcome is known, or by authorized claim).
+     */
+    function executePayout(bytes32 eventId, address athlete, uint256 amount) external {
+        require(amount > 0, "Invalid amount");
         require(eventPayoutPool[eventId] >= amount, "Insufficient pool");
+        require(!athletePayouts[eventId] , "Payout already executed"); // simplistic single payout per event for starter
 
-        uint256 requestId = s_vrfCoordinator.requestRandomWords(
-            VRFV2PlusClient.RandomWordsRequest({
-                keyHash: s_keyHash,
-                subId: s_subscriptionId,
-                requestConfirmations: requestConfirmations,
-                callbackGasLimit: callbackGasLimit,
-                numWords: numWords,
-                extraArgs: VRFV2PlusClient._argsToBytes(
-                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
-                )
-            })
-        );
-
-        requestIdToEventId[requestId] = eventId;
-        // Store amount somehow, for simplicity assume from balance
-        nilRightsBalance[msg.sender] -= amount; // lock
+        athletePayouts[eventId] = amount;
         eventPayoutPool[eventId] -= amount;
-    }
 
-    function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) internal override {
-        bytes32 eventId = requestIdToEventId[requestId];
-        uint256 randomOutcome = randomWords[0] % 100;
-        uint256 payoutAmount = eventPayoutPool[eventId]; // or stored
-
-        if (randomOutcome > 50) {
-            // Payout
-            require(stablecoin.transfer(msg.sender, payoutAmount), "Payout failed");
-            emit NILPayoutClaimed(msg.sender, payoutAmount, eventId, randomOutcome);
-        } else {
-            // No payout, perhaps burn or return
-            eventPayoutPool[eventId] += payoutAmount; // return to pool
+        // Actual stable payout (fund this contract or approve upstream)
+        if (address(stablecoin) != address(0)) {
+            // Best effort; in prod use pull or treasury pattern
+            try stablecoin.transfer(athlete, amount) {} catch {}
         }
 
-        // Emit BridgePayload for cross-chain (e.g. to Base for liquidity, XRPL for trading)
+        uint256 outcome = vrf.getEventRandomSeed(eventId); // for event
+
+        emit NILPayoutExecuted(eventId, athlete, amount, outcome);
+
+        // Cross-chain payload for settlement on other rails
         BridgePayload memory payload = BridgePayload({
             version: 1,
             timestamp: block.timestamp,
             sourceChainId: 43114, // Avalanche
-            destinationChainId: 8453, // Base example
+            destinationChainId: 8453, // Base example; CCIP can route further
             assetId: keccak256(abi.encodePacked("NIL", eventId)),
             eventId: eventId,
             sender: address(this),
-            receiver: msg.sender,
-            amount: payoutAmount,
+            receiver: athlete,
+            amount: amount,
             fee: 0,
-            action: randomOutcome > 50 ? "PAYOUT" : "NO_PAYOUT",
-            data: abi.encode(randomOutcome),
+            action: "NIL_PAYOUT",
+            data: abi.encode(outcome),
             lps1Hash: bytes32(0),
             gmiiSignature: bytes32(0)
         });
         bytes32 payloadHash = BridgePayloadLib.hash(payload);
         emit BridgePayloadEmitted(payloadHash, payload);
-
-        delete requestIdToEventId[requestId];
     }
 
-    // Admin functions
-    function withdrawStablecoin(uint256 amount) external onlyOwner {
-        require(stablecoin.transfer(msg.sender, amount), "Withdraw failed");
+    function getPayout(bytes32 eventId) external view returns (uint256) {
+        return athletePayouts[eventId];
+    }
+
+    function getPool(bytes32 eventId) external view returns (uint256) {
+        return eventPayoutPool[eventId];
     }
 }

@@ -5,44 +5,7 @@ import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-// BridgePayload standard (shared for all rails + stables + proofs)
-struct BridgePayload {
-    uint256 version;
-    uint256 timestamp;
-    uint256 sourceChainId;
-    uint256 destinationChainId;
-    bytes32 assetId;
-    bytes32 eventId;
-    address sender;
-    address receiver;
-    uint256 amount;
-    uint256 fee;
-    string action;
-    bytes data;
-    bytes32 lps1Hash;
-    bytes32 gmiiSignature;
-}
-
-library BridgePayloadLib {
-    function hash(BridgePayload memory payload) internal pure returns (bytes32) {
-        return keccak256(abi.encode(
-            payload.version,
-            payload.timestamp,
-            payload.sourceChainId,
-            payload.destinationChainId,
-            payload.assetId,
-            payload.eventId,
-            payload.sender,
-            payload.receiver,
-            payload.amount,
-            payload.fee,
-            payload.action,
-            payload.data,
-            payload.lps1Hash,
-            payload.gmiiSignature
-        ));
-    }
-}
+import "../BridgePayload.sol";
 
 contract TroptionsCCIPBridge is Ownable {
     IRouterClient private immutable i_router;
