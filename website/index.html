@@ -585,12 +585,10 @@
     </footer>
 
     <script>
-        // Tailwind script
         function initializeTailwind() {
             document.documentElement.style.setProperty('--accent', '#f59e0b');
         }
 
-        // Initialize Mermaid
         function initializeMermaid() {
             mermaid.initialize({ 
                 startOnLoad: false,
@@ -598,7 +596,6 @@
                 securityLevel: 'loose'
             });
 
-            // High-level mindmap
             const mindmapEl = document.getElementById('mermaid-mindmap');
             if (mindmapEl) {
                 mindmapEl.innerHTML = `
@@ -638,7 +635,6 @@ mindmap
                 mermaid.run({ nodes: [mindmapEl.querySelector('.mermaid')] });
             }
 
-            // Sequence diagram
             const sequenceEl = document.getElementById('mermaid-sequence');
             if (sequenceEl) {
                 sequenceEl.innerHTML = `
@@ -671,7 +667,6 @@ sequenceDiagram
             }
         }
 
-        // Simple smooth scroll for nav
         function setupNavigation() {
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -684,7 +679,6 @@ sequenceDiagram
             });
         }
 
-        // Keyboard shortcut for Codespaces
         function setupShortcuts() {
             document.addEventListener('keydown', function(e) {
                 if (e.metaKey && e.key === "/") {
@@ -694,14 +688,12 @@ sequenceDiagram
             });
         }
 
-        // Initialize everything
         function init() {
             initializeTailwind();
             initializeMermaid();
             setupNavigation();
             setupShortcuts();
             
-            // Add subtle animation to rail cards
             const cards = document.querySelectorAll('.rail-card');
             cards.forEach((card, i) => {
                 card.style.opacity = '0';
