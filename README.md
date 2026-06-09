@@ -24,6 +24,7 @@
 - [Quick Start](#quick-start)
 - [Major Integrations & Tools](#major-integrations--tools)
 - [Professional Shareable Site](#professional-shareable-site)
+- [Developer Documentation](#developer-documentation)
 - [Contributing](#contributing)
 - [Licenses](#licenses)
 
@@ -187,7 +188,7 @@ Troptions Rails significantly elevates the Troptions brand:
 - **Partnership Power**: 1-click demos, clear Golden Paths, and verifiable manifests make onboarding FTH partners, talent programs, and institutions dramatically easier.
 - **Sovereign Optionality**: Full control over 9 rails with activation flags, AI orchestration, and proof systems — ready for real adoption and revenue.
 
-See the [professional shareable site](#professional-shareable-site) for a polished overview.
+See the [Professional Shareable Site](#professional-shareable-site) for a polished overview.
 
 ---
 
@@ -271,13 +272,21 @@ python troptions_sovereign_orchestrator.py
 ---
 
 ## Major Integrations & Tools
+
 - **Unified BridgePayload** — Cross-chain standard.
 - **Golden Path** — 14+ step verified flows.
 - **E2E Harness** — Mock + live testing.
 - **Chainlink Full Stack** — VRF, CCIP, Automation, PoR.
 - **Proof System** — IPFS + Cloudflare + LPS-1 + GMIIE.
 - **Legacy Vault 5-Proof**.
-- **Parallel Stablecoin Engine** (TUSD, sBTC, TROPTIONS utility).
+- **Parallel Stablecoin Engine** — Direct support for major stablecoins and assets:
+  - USDT (Tether) — high-volume transfers across Solana, Avalanche, XRPL, Base.
+  - USDC (Circle) — liquidity and gas abstraction on Base, Solana, Sui.
+  - RLUSD (Ripple) — institutional settlements on XRPL and bridged rails.
+  - PAXO / PAX (Paxos) — regulated value on Ethereum L2s and Besu.
+  - Other important stablecoins: DAI (decentralized), PYUSD (PayPal), TUSD, FRAX, and Troptions-wrapped variants.
+  - Plus sBTC (Bitcoin anchor) and TROPTIONS utility.
+  The engine handles mint/burn, atomic swaps, revenue splits, and peg proofs via Chainlink.
 
 ---
 
@@ -297,6 +306,24 @@ It covers:
 **Deploy & share**: See [Deployment](#deployment) section. Perfect for partners, FTH, or public demos.
 
 The site is also pushed from `troptions-professional-site/index.html` for reference.
+
+---
+
+## Developer Documentation
+
+For technical integration details, including:
+- BridgePayload schema and examples
+- Stablecoin integration guides (USDT, USDC, RLUSD, PAXO, DAI, etc.)
+- Per-rail code samples (Anchor, Move, Clarity, ERC-20, etc.)
+- Building custom Golden Paths
+- Using the Orchestrator and Registry
+
+See the full [Developer Guide](docs/DEVELOPER_GUIDE.md).
+
+Additional resources:
+- `docs/HOW_IT_WORKS.md`
+- `docs/FLOW_TREES.md`
+- Source implementations in connected repos (e.g., troptions-avalanche-sports).
 
 ---
 
