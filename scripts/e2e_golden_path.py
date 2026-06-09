@@ -80,6 +80,12 @@ def simulate_full_golden_path(phase: int, event: str, amount: int):
     print("\nGates: Payload valid, lps1Hash present, stables routed, validator would pass, proofs (LPS-1) updated.")
     print("Next for LIVE: 1. Set keys in .env 2. forge script or ts deploy on Fuji/Solana devnet 3. Capture real hashes 4. Re-run with --record-tx 5. Update site + E2E doc + v0.1.0")
 
+def record_real_tx(step: int, tx_hash: str, chain: str = "avalanche-fuji"):
+    """Helper for post-deploy: record real tx and print update snippet for site/E2E/ docs."""
+    print(f"\n[RECORD] Step {step} on {chain}: {tx_hash}")
+    print("  Paste into E2E doc / site 'Live Hashes' table and re-push.")
+    # In real harness this could append to a json manifest or auto-edit files.
+    return {"step": step, "tx": tx_hash, "chain": chain, "timestamp": int(time.time())}
 
 def main():
     parser = argparse.ArgumentParser()
@@ -87,7 +93,14 @@ def main():
     parser.add_argument("--mode", default="simulate")
     parser.add_argument("--event", default="FIFA_NIL_2026_Q3")
     parser.add_argument("--amount", type=int, default=250000)
+    parser.add_argument("--record-tx", default=None, help="Real tx hash to record for current step (use after live deploy)")
+    parser.add_argument("--record-step", type=int, default=1, help="Which step the --record-tx belongs to")
     args = parser.parse_args()
+
+    if args.record_tx:
+        record_real_tx(args.record_step, args.record_tx)
+        print("Run again with next real hash or --phase X to continue sim.")
+        return
 
     payload = make_bridge_payload(args.event, args.amount, phase=args.phase)
 
@@ -95,7 +108,8 @@ def main():
     for s in range(1, 8):
         simulate_step(s, payload, args.phase)
     print("\nGates for Phase 0: Hashes recorded, validator green, proofs updated.")
-    print("Update E2E_GOLDEN_PATH.md and site with real txs after deploy.")
+    print("To record LIVE: python Scripts/e2e_golden_path.py --record-tx 0xREALHASH --record-step 3")
+    print("Update E2E_GOLDEN_PATH.md and site with real txs after deploy. Then re-run --phase 5 for full report.")
 
 if __name__ == "__main__":
     main()
