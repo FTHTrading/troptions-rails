@@ -1,6 +1,6 @@
 **Troptions Senior-Level Contract Template Suite (Expanded - 29 Contracts)**
 
-... (previous) ...
+... (previous full content with all prior contracts) ...
 
 **Governance & Agent Layer (New):**
 - TroptionsGovernanceTimelock.sol - 48h timelock for upgrades/admin, BridgePayload for audit. Ties to AccessControl, Registry, Hub.
