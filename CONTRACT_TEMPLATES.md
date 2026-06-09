@@ -1,23 +1,13 @@
-**Troptions Senior-Level Contract Template Suite (Expanded - Full 9+ Rails + Institutional Layer)**
+**Troptions Senior-Level Contract Template Suite (Elite Institutional Layer)**
 
-Production-grade, audit-ready templates for the Troptions 9-rail system (practical focus: XRPL, Solana, Base, Avalanche, Stacks/sBTC, Chainlink + Bitcoin/Stellar as core; others as adapters/future).
+... (previous core + multi-chain adapters) ...
 
-**Core EVM/Settlement (previous 1-17+):**
-- [full previous list including EliteSettlementCore, etc.]
+**Compliance & Identity Layer (New):**
+- TroptionsKYCCompliance.sol - Role-based KYC/AML, whitelists, jurisdictions, blacklists. Integrates BridgePayload + SettlementCore gating.
+- TroptionsIdentityVerifier.sol - On-chain claims verifier (ERC-3643 style). Ties to KYC, LPS-1 provenance.
 
-**Native Adapters (BridgePayload compatible for all systems):**
-- Stacks: TroptionsNILRights.clar
-- Solana: Anchor NIL (Rust)
-- Sui: nil_rights.move
-- Cosmos: troptions_cosm_wasm.rs (IBC NIL/Stable with payload equiv)
-- XRPL: xrpl_gateway.js + xrpl_nil_hook.c (issued currencies, AMM, Hooks with LPS-1)
-- Besu: TroptionsPrivateRail.sol (permissioned EVM for private assets/NIL)
+Full suite now includes compliance for institutional NIL/RWA/stable flows across 9+ rails.
 
-**Usage & Integration:**
-- All use BridgePayload (or equivalent) for unified flows (Golden Path across EVM + native rails).
-- LPS-1/XXXIII hooks in all.
-- See contracts/ subdirs for full multi-chain suite.
-
-See contracts/ for source. Professional site has Senior Templates box with color-coded status (🔵 BUILT for full multi-chain coverage).
+See contracts/ for source. Professional site updated with color-coded grid.
 
 © 2026 FTH Trading / UnyKorn

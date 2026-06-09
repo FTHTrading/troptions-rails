@@ -1,14 +1,13 @@
  # Real Contracts & System Integrations for Troptions Rails
 
-**Senior-Level Production-Grade Template Suite (Full 9+ Rails + Institutional)**
+**Senior-Level Production-Grade Template Suite (Expanded with Compliance Layer)**
 
-See CONTRACT_TEMPLATES.md (root) for the full guide.
+See CONTRACT_TEMPLATES.md for full guide.
 
-**Native Adapters for All Systems (added):**
-- contracts/besu/TroptionsPrivateRail.sol
-- contracts/cosmos/troptions_cosm_wasm.rs
-- contracts/xrpl/xrpl_nil_hook.c (in addition to previous gateway)
+**New: Compliance & Identity**
+- TroptionsKYCCompliance.sol
+- TroptionsIdentityVerifier.sol
 
-All integrated with BridgePayload concept, stables, provenance. Honest status: 🔵 BUILT for core EVM + settlement + native adapters for every rail.
+Integrated with existing BridgePayload, AccessControl, EliteSettlementCore, etc. Honest status: 🔵 BUILT for core + adapters + compliance.
 
-The activate.sh now references the full multi-chain suite for 1-click with Sovereign Orchestrator.
+The activate.sh now references the full elite suite for 1-click with Sovereign Orchestrator.
