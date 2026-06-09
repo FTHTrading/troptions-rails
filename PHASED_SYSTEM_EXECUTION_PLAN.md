@@ -1,1 +1,1 @@
-[Updated PLAN with Cloudflare, emails, Bryan, 100% flow]
+[Updated with site cleanup status and 100% badges note]
