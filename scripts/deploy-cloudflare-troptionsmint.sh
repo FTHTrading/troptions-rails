@@ -1,0 +1,1 @@
+[Full deploy script for os.troptionsmint.com subdomain and email integration]
