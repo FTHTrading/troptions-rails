@@ -1,14 +1,16 @@
  # Real Contracts & System Integrations for Troptions Rails
 
-**Senior-Level Production-Grade Template Suite (Expanded with Risk & Compliance Layer)**
+**Senior-Level Production-Grade Template Suite (Expanded - ~25 Contracts)**
 
-See CONTRACT_TEMPLATES.md for full guide.
+See CONTRACT_TEMPLATES.md (root) for the full guide.
 
-**New: Risk & Compliance**
-- TroptionsKYCCompliance.sol
-- TroptionsProofVerifier.sol
-- TroptionsCircuitBreaker.sol
+**Core + New Institutional:**
+- [previous]
+- TroptionsRWAToken.sol
+- TroptionsRateLimiter.sol
+- TroptionsTokenFactory.sol
+- TroptionsCrossChainRouter.sol
 
-Integrated with existing BridgePayload, AccessControl, EliteSettlementCore, etc. Honest status: 🔵 BUILT for core + adapters + compliance/risk layer.
+All integrated with BridgePayload (LPS-1, stables), guards, NatSpec. Honest status: 🔵 BUILT for core EVM/settlement + institutional layer + native adapters for 9+ rails. Focused on 6-7 core for revenue, full vision supported.
 
-The activate.sh now references the full elite suite for 1-click with Sovereign Orchestrator.
+The activate.sh now references the full suite for 1-click with Sovereign Orchestrator.

@@ -1,14 +1,17 @@
-**Troptions Senior-Level Contract Template Suite (Elite Institutional Layer)**
+**Troptions Senior-Level Contract Template Suite (Expanded - ~25 Contracts)**
 
-... (previous) ...
+Production-grade, audit-ready templates for the Troptions 9-rail system (practical focus: XRPL, Solana, Base, Avalanche, Stacks/sBTC, Chainlink + Bitcoin/Stellar as core; others as adapters/future).
 
-**Risk & Compliance Layer (New):**
-- TroptionsKYCCompliance.sol - Role-based KYC/AML, whitelists, jurisdictions, blacklists. Integrates BridgePayload + SettlementCore gating.
-- TroptionsProofVerifier.sol - LPS-1 / XXXIII / GMIIE proof verifier. Ties to KYC, BridgePayload.
-- TroptionsCircuitBreaker.sol - Emergency kill switch (global + per-rail). Integrates with Hub/Orchestrator.
+**Core EVM/Settlement + Institutional (previous + new):**
+- [full previous list]
+- TroptionsRWAToken.sol (Institutional RWA Token with freezing, compliance)
+- TroptionsRateLimiter.sol (Per-user daily limits, payload-aware)
+- TroptionsTokenFactory.sol (Dynamic RWA token deployment per assetId)
+- TroptionsCrossChainRouter.sol (Unified payload routing via CCIP + rail bridges)
 
-Full suite now includes compliance/risk for institutional NIL/RWA/stable flows across 9+ rails.
-
-See contracts/ for source. Professional site updated with color-coded grid.
+**Usage & Integration:**
+- All use BridgePayload for unified flows (Golden Path: VRF -> NIL -> Orchestrator/Hub -> Router/Factory -> CCIP/Gateway to target rail).
+- LPS-1/XXXIII hooks, KYC/Compliance gating, CircuitBreaker, RateLimiter for institutional safety.
+- See contracts/ for source. Professional site has Senior Templates box with color-coded status (🔵 BUILT for expanded suite).
 
 © 2026 FTH Trading / UnyKorn
