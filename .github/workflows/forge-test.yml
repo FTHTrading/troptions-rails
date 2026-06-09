@@ -1,1 +1,24 @@
-[full CI from write]
+name: Foundry Tests (dedicated)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+      - name: Deps & Build
+        run: |
+          cd contracts || true
+          forge install OpenZeppelin/openzeppelin-contracts --no-commit
+          forge install smartcontractkit/chainlink-brownie-contracts --no-commit
+          forge build
+      - name: Test all
+        run: cd contracts && forge test --match-contract "Test*" -vv
+      - name: Gas snapshot
+        run: cd contracts && forge snapshot || true
