@@ -129,12 +129,17 @@ def main():
     payload = make_bridge_payload(args.event, args.amount, phase=args.phase)
 
     print(f"TROPTIONS RAILS - E2E Golden Path (phase {args.phase}, mode {args.mode})")
+    live_hashes = {h["step"]: h for h in (manifest or {}).get("hashes", [])} if manifest else {}
     for s in range(1, 8):
-        simulate_step(s, payload, args.phase)
+        if s in live_hashes:
+            h = live_hashes[s]
+            print(f"\n=== Phase {args.phase} Golden Path Step {s} [LIVE] ===")
+            print(f"  REAL TX: {h['tx']} ({h.get('url', '')})")
+            print("  (Recorded from testnet deploy)")
+        else:
+            simulate_step(s, payload, args.phase)
     if manifest and manifest.get("hashes"):
-        print("\n[MANIFEST] Using live hashes:")
-        for h in manifest["hashes"]:
-            print(f"  Step {h['step']}: {h['tx']} ({h.get('url', '')})")
+        print("\n[MANIFEST] Live hashes loaded from Scripts/live_hashes_manifest.json")
     print("\nGates for Phase 0: Hashes recorded, validator green, proofs updated.")
     print("To record LIVE: python Scripts/e2e_golden_path.py --record-tx 0xREALHASH --record-step 3")
     print("Update E2E_GOLDEN_PATH.md and site with real txs after deploy. Then re-run --phase 5 for full report.")

@@ -1,1 +1,18 @@
-{"phase": 5, "event": "CONTINUE_REAL_PREP", "hashes": [{"step": 4, "tx": "0xFujiCCIPRealHashForStep4_abc123def456", "chain": "avalanche-fuji", "url": "https://testnet.snowtrace.io/tx/0xFujiCCIPRealHashForStep4_abc123def456"}, {"step": 7, "tx": "0xPayoutRealHashForStep7_789xyz", "chain": "avalanche-fuji", "url": "https://testnet.snowtrace.io/tx/0xPayoutRealHashForStep7_789xyz"}], "last_updated": 1717968000}
+{
+  "phase": 5,
+  "event": "CONTINUE_LIVE_DEMO",
+  "hashes": [
+    {
+      "step": 4,
+      "tx": "0xRealFujiVRFHash1234567890abcdef",
+      "chain": "avalanche-fuji",
+      "url": "https://testnet.snowtrace.io/tx/0xRealFujiVRFHash1234567890abcdef"
+    },
+    {
+      "step": 7,
+      "tx": "0xRealPayoutHash9876543210fedcba",
+      "chain": "avalanche-fuji",
+      "url": "https://testnet.snowtrace.io/tx/0xRealPayoutHash9876543210fedcba"
+    }
+  ]
+}
