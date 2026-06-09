@@ -10,19 +10,13 @@ param(
 Write-Host "=== TROPTIONS PHASE 0 LAUNCHER ===" -ForegroundColor Green
 Write-Host "Mode: $Mode" 
 
-# 1. Orchestrator Phase 0
-Write-Host "`n[1/5] Running Phase 0 in Orchestrator..."
+# 1. Orchestrator Phase 0 (use Python runner for reliability)
+Write-Host "`n[1/5] Running Phase 0 via portable runner..."
+python scripts/phase_runner.py --phase 0 --mode $Mode
+# Fallback direct orchestrator if needed
 cd AI_Agents_Hub
-$orchResult = python troptions_sovereign_orchestrator.py --exec "run phase 0 $Mode" 2>$null
-if (-not $orchResult) {
-    $orchResult = python -c "
-import sys
-sys.path.append('.')
-from troptions_sovereign_orchestrator import run_phase
-print(run_phase(0, '$Mode'))
-"
-}
-Write-Host $orchResult
+python troptions_sovereign_orchestrator.py 2>$null | Select-Object -First 5
+cd ..
 
 # 2. E2E Harness
 Write-Host "`n[2/5] E2E Golden Path Simulation..."
