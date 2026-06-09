@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TROPTIONS RAILS | Sovereign Multi-Chain Infrastructure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0f172a;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-header {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .troptions-gold {
+            color: #f59e0b;
+        }
+
+        .nav-active {
+            color: #f59e0b;
+            border-bottom: 2px solid #f59e0b;
+        }
+
+        .rail-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .rail-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .status-live { background-color: #166534; color: #86efac; }
+        .status-built { background-color: #1e40af; color: #93c5fd; }
+        .status-integrated { background-color: #854d0e; color: #fde047; }
+
+        .mermaid {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .professional-gradient {
+            background: linear-gradient(145deg, #0f172a, #1e2937);
+        }
+
+        .metric {
+            font-size: 2.5rem;
+            line-height: 2.75rem;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: #f59e0b;
+        }
+
+        .flow-tree {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 16px;
+        }
+
+        .brand-stat {
+            transition: transform 0.3s ease;
+        }
+        
+        .brand-stat:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200">
+    <!-- Navigation -->
+    <nav class="border-b border-slate-800 bg-slate-950/95 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-x-3">
+                    <div class="flex items-center gap-x-2">
+                        <div class="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center">
+                            <span class="text-slate-950 font-bold text-2xl">T</span>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-2xl tracking-tight">TROPTIONS</span>
+                            <span class="text-amber-500 font-semibold text-2xl">RAILS</span>
+                        </div>
+                    </div>
+                    <div class="hidden md:flex items-center px-3 py-1 bg-slate-900 rounded-full text-xs font-medium border border-slate-700">
+                        <span class="text-emerald-400">●</span>
+                        <span class="ml-1.5 text-emerald-400">LIVE</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center gap-x-8 text-sm">
+                    <a href="#overview" class="nav-link text-slate-300 hover:text-white">Overview</a>
+                    <a href="#rails" class="nav-link text-slate-300 hover:text-white">The 9 Rails</a>
+                    <a href="#how-it-works" class="nav-link text-slate-300 hover:text-white">How It Works</a>
+                    <a href="#brand" class="nav-link text-slate-300 hover:text-white">Brand Impact</a>
+                    <a href="#capabilities" class="nav-link text-slate-300 hover:text-white">What Can Be Done</a>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <a href="https://github.com/FTHTrading/troptions-rails" target="_blank"
+                       class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium border border-slate-700 hover:bg-slate-900 rounded-xl transition-colors">
+                        <i class="fab fa-github"></i>
+                        <span class="hidden md:inline">View on GitHub</span>
+                    </a>
+                    
+                    <a href="https://github.com/codespaces/new?hide_repo_selector=true&amp;ref=main&amp;repo=FTHTrading/troptions-rails" target="_blank"
+                       class="flex items-center gap-x-2 bg-white text-slate-950 hover:bg-amber-400 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-[0.985]">
+                        <i class="fas fa-rocket mr-1"></i>
+                        <span>Launch in Codespaces</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-7xl mx-auto px-6 pt-16 pb-20">
+        <div class="max-w-4xl">
+            <div class="inline-flex items-center gap-x-2 px-4 py-1.5 bg-slate-900 border border-slate-700 rounded-full text-sm mb-6">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                </span>
+                <span class="font-medium">9 Production Rails • 1-Click Orchestration</span>
+            </div>
+
+            <h1 class="text-6xl md:text-7xl font-semibold tracking-tighter leading-none heading-font">
+                Sovereign Multi-Chain<br>
+                Infrastructure for<br>
+                <span class="troptions-gold">Real Utility</span>
+            </h1>
+            
+            <p class="mt-6 max-w-2xl text-xl text-slate-400">
+                The professional orchestration layer powering the Troptions empire. 
+                9 fully built and integrated rails with unified data standards, 
+                end-to-end Golden Paths, and one-click activation.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-4 mt-10">
+                <a href="https://github.com/codespaces/new?hide_repo_selector=true&amp;ref=main&amp;repo=FTHTrading/troptions-rails" 
+                   target="_blank"
+                   class="inline-flex items-center justify-center gap-3 bg-white hover:bg-amber-400 transition-all active:scale-[0.985] text-slate-950 font-semibold px-8 h-14 rounded-2xl text-base">
+                    <i class="fas fa-play mr-1"></i>
+                    Launch 1-Click Environment
+                </a>
+                
+                <a href="https://github.com/FTHTrading/troptions-rails" target="_blank"
+                   class="inline-flex items-center justify-center gap-3 border border-slate-700 hover:bg-slate-900 transition-all px-7 h-14 rounded-2xl text-base font-medium">
+                    <i class="fab fa-github mr-2"></i>
+                    Explore the Code
+                </a>
+            </div>
+            
+            <div class="flex items-center gap-x-8 mt-8 text-sm text-slate-400">
+                <div class="flex items-center gap-x-2">
+                    <i class="fas fa-check text-emerald-400"></i>
+                    <span>Fully Audited Rails</span>
+                </div>
+                <div class="flex items-center gap-x-2">
+                    <i class="fas fa-check text-emerald-400"></i>
+                    <span>Production-Ready Tooling</span>
+                </div>
+                <div class="flex items-center gap-x-2">
+                    <i class="fas fa-check text-emerald-400"></i>
+                    <span>Complete Proof System</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Trust / Metrics Bar -->
+    <div class="border-y border-slate-800 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-6 py-5">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl font-semibold text-white">9</div>
+                    <div class="text-sm text-slate-400 mt-1">Production Rails</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-semibold text-white">14+</div>
+                    <div class="text-sm text-slate-400 mt-1">Golden Path Steps</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-semibold text-white">1</div>
+                    <div class="text-sm text-slate-400 mt-1">Click Activation</div>
+                </div>
+                <div>
+                    <div class="text-4xl font-semibold text-white">100%</div>
+                    <div class="text-sm text-slate-400 mt-1">Sovereign Control</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overview -->
+    <section id="overview" class="max-w-7xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-12 gap-x-12 items-center">
+            <div class="md:col-span-7">
+                <div class="uppercase tracking-[3px] text-xs font-semibold text-amber-400 mb-3">THE TROPTIONS ECOSYSTEM</div>
+                <h2 class="section-header leading-tight">The complete professional foundation<br>for real-world blockchain utility.</h2>
+                
+                <div class="mt-8 text-lg text-slate-400 max-w-prose">
+                    Troptions Rails transforms the original vision of Troptions into a modern, 
+                    enterprise-grade multi-chain platform. Built with production tooling, 
+                    verifiable flows, and sovereign orchestration.
+                </div>
+            </div>
+            
+            <div class="md:col-span-5 mt-10 md:mt-0">
+                <div class="professional-gradient border border-slate-700 rounded-3xl p-8">
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-9 h-9 flex-shrink-0 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center">
+                                <i class="fas fa-link text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Unified BridgePayload</div>
+                                <div class="text-sm text-slate-400">Single data standard across all 9 rails</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-9 h-9 flex-shrink-0 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center">
+                                <i class="fas fa-project-diagram text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Golden Path Orchestration</div>
+                                <div class="text-sm text-slate-400">End-to-end verified flows (FIFA NIL example)</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-9 h-9 flex-shrink-0 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center">
+                                <i class="fas fa-robot text-xl"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">AI-Powered Sovereign Orchestrator</div>
+                                <div class="text-sm text-slate-400">1-click army, sims, configs &amp; deployments</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The 9 Rails -->
+    <section id="rails" class="bg-slate-900 border-y border-slate-800 py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-end justify-between mb-10">
+                <div>
+                    <div class="text-amber-400 text-sm font-semibold tracking-widest">CORE INFRASTRUCTURE</div>
+                    <h3 class="section-header mt-2">The 9 Production Rails</h3>
+                </div>
+                <a href="#capabilities" class="hidden md:flex items-center gap-x-2 text-sm text-amber-400 hover:text-amber-300 font-medium">
+                    See what you can build <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Rail Cards -->
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🟢</div>
+                            <div>
+                                <div class="font-semibold">Solana</div>
+                                <div class="text-xs text-emerald-400">LIVE &amp; STRONG</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-emerald-900 text-emerald-300 rounded-full font-mono">L1</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">Primary intake &amp; minting layer. Anchor programs, Wormhole bridges, troptionsmint.com.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: Anchor program • Wormhole VAA • BridgePayload</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🔵</div>
+                            <div>
+                                <div class="font-semibold">Avalanche</div>
+                                <div class="text-xs text-blue-400">FULLY BUILT</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-blue-900 text-blue-300 rounded-full font-mono">L1 + Subnet</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">High-throughput sports execution. HyperSDK Actions, Teleporter hub, NIL rights.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: IssueDynamicTicket • ClaimNILPayout • HyperVM</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🔵</div>
+                            <div>
+                                <div class="font-semibold">Stacks</div>
+                                <div class="text-xs text-blue-400">FULLY BUILT</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-blue-900 text-blue-300 rounded-full font-mono">Bitcoin L2</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">sBTC settlement &amp; Bitcoin reserve anchor. Clarity contracts and peg infrastructure.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: NIL revenue contracts • sBTC peg • Wormhole receiver</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🔵</div>
+                            <div>
+                                <div class="font-semibold">Base</div>
+                                <div class="text-xs text-blue-400">FULLY BUILT</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-blue-900 text-blue-300 rounded-full font-mono">OP Stack</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">Liquidity &amp; mass onboarding. ERC-4337 smart wallets and TUSD stablecoin support.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: TroptionsAccount • Paymaster • Superchain interop</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🔵</div>
+                            <div>
+                                <div class="font-semibold">Sui</div>
+                                <div class="text-xs text-blue-400">FULLY BUILT</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-blue-900 text-blue-300 rounded-full font-mono">L1 (Move)</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">Parallel high-volume execution. Optimized for massive concurrent transactions.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: Move rail modules • sports_vrf • BridgePayload support</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🔵</div>
+                            <div>
+                                <div class="font-semibold">Cosmos IBC Hub</div>
+                                <div class="text-xs text-blue-400">FULLY BUILT</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-blue-900 text-blue-300 rounded-full font-mono">IBC Zone</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">Cross-chain coordination and oracle hub. Full Hermes IBC relayer support.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: troptions-cosmos-hub • Hermes relayer • Oracle consumer</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🟢</div>
+                            <div>
+                                <div class="font-semibold">XRPL</div>
+                                <div class="text-xs text-emerald-400">LIVE</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-emerald-900 text-emerald-300 rounded-full font-mono">L1</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">Live trading and Exchange OS. AMM, proof packets, and issuer tooling.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: Live DEX • Gateway • Proof packet system</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🔵</div>
+                            <div>
+                                <div class="font-semibold">Hyperledger Besu</div>
+                                <div class="text-xs text-blue-400">FULLY BUILT</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-blue-900 text-blue-300 rounded-full font-mono">Enterprise</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">Permissioned EVM for banking and CBDC. Private transactions and compliance hooks.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: QBFT network • Private tx rail • Compliance tooling</div>
+                </div>
+
+                <div class="rail-card bg-slate-950 border border-slate-700 rounded-3xl p-6">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-2xl">🟠</div>
+                            <div>
+                                <div class="font-semibold">Chainlink</div>
+                                <div class="text-xs text-amber-400">FULLY INTEGRATED</div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-1 text-[10px] bg-amber-900 text-amber-300 rounded-full font-mono">Oracle Layer</div>
+                    </div>
+                    <div class="mt-4 text-sm text-slate-400">The intelligence backbone. VRF, CCIP, Automation, and Proof of Reserves across all rails.</div>
+                    <div class="mt-4 text-xs text-slate-500">Key: VRF • CCIP messaging • Automation keepers • PoR</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It All Works -->
+    <section id="how-it-works" class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl">
+            <div class="text-amber-400 text-sm font-semibold tracking-[2px]">THE SYSTEM</div>
+            <h3 class="section-header mt-3">How It All Works</h3>
+            <p class="mt-4 text-xl text-slate-400">A sovereign empire built on three pillars: unified data, verified flows, and professional orchestration.</p>
+        </div>
+
+        <div class="mt-12 grid lg:grid-cols-2 gap-6">
+            <!-- BridgePayload -->
+            <div class="border border-slate-700 rounded-3xl p-8">
+                <div class="uppercase text-xs tracking-widest text-slate-400 mb-3">1. UNIFIED DATA LAYER</div>
+                <h4 class="font-semibold text-2xl">BridgePayload Standard</h4>
+                <p class="mt-3 text-slate-400">Every rail speaks the same language. One standardized payload carries intent, attestations, cross-chain references, and revenue metadata.</p>
+                <div class="mt-6 bg-slate-900 p-4 rounded-2xl text-xs font-mono text-emerald-300 overflow-x-auto">
+                    {"intent": "claim_nil_payout", "source_chain": "solana", "target_chains": ["avalanche", "stacks"], "payload": { ... }, "attestations": ["chainlink_vrf", "wormhole_vaa"]}
+                </div>
+            </div>
+
+            <!-- Golden Path -->
+            <div class="border border-slate-700 rounded-3xl p-8">
+                <div class="uppercase text-xs tracking-widest text-slate-400 mb-3">2. END-TO-END VERIFIED FLOW</div>
+                <h4 class="font-semibold text-2xl">The Golden Path</h4>
+                <p class="mt-3 text-slate-400">A complete 14+ step canonical flow (FIFA NIL example) that can be activated, tested, and proven in minutes.</p>
+                <div class="mt-6 flex flex-wrap gap-2 text-xs">
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">Solana Intake</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">Wormhole Bridge</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">Chainlink VRF</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">Avalanche Execution</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">sBTC Settlement</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">Cosmos Coordination</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">XRPL Trading</div>
+                    <div class="px-3 py-1 bg-slate-900 rounded-full">Proof Aggregation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flow Trees Preview -->
+        <div class="mt-12">
+            <div class="flex items-center justify-between mb-4">
+                <h4 class="font-semibold text-xl">Architecture Flow Trees</h4>
+                <a href="https://github.com/FTHTrading/troptions-rails/blob/main/docs/FLOW_TREES.md" target="_blank" 
+                   class="text-sm flex items-center gap-x-1 text-amber-400 hover:text-amber-300">
+                    View full diagrams on GitHub <i class="fas fa-external-link-alt text-xs ml-1"></i>
+                </a>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flow-tree p-5">
+                    <div class="text-xs uppercase tracking-widest mb-3 text-slate-400">HIGH-LEVEL EMPIRE</div>
+                    <div id="mermaid-mindmap" class="text-sm"></div>
+                </div>
+                <div class="flow-tree p-5">
+                    <div class="text-xs uppercase tracking-widest mb-3 text-slate-400">GOLDEN PATH SEQUENCE</div>
+                    <div id="mermaid-sequence" class="text-sm"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Boost -->
+    <section id="brand" class="border-t border-slate-800 bg-slate-900 py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center mb-14">
+                <div class="text-amber-400 text-sm font-semibold tracking-[2px]">BRAND ELEVATION</div>
+                <h3 class="section-header mt-3">How Troptions Rails Boosts the Brand</h3>
+                <p class="text-slate-400 mt-3">Moves Troptions from "early crypto concept" to serious, production-grade infrastructure.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="brand-stat bg-slate-950 border border-slate-700 rounded-3xl p-7">
+                    <div class="text-amber-400">
+                        <i class="fas fa-shield-alt text-3xl"></i>
+                    </div>
+                    <div class="mt-6 font-semibold text-xl">Credibility &amp; Trust</div>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-400">Professional tooling, full documentation, audited rails, and cryptographic proof systems signal to partners and institutions that Troptions is serious infrastructure — not another speculative token.</p>
+                </div>
+                
+                <div class="brand-stat bg-slate-950 border border-slate-700 rounded-3xl p-7">
+                    <div class="text-amber-400">
+                        <i class="fas fa-globe text-3xl"></i>
+                    </div>
+                    <div class="mt-6 font-semibold text-xl">Real Utility Differentiation</div>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-400">While most projects chase hype, Troptions now demonstrates actual cross-chain flows (sports capital, payments, barter) with live rails like XRPL and Solana plus 7 fully built production layers.</p>
+                </div>
+                
+                <div class="brand-stat bg-slate-950 border border-slate-700 rounded-3xl p-7">
+                    <div class="text-amber-400">
+                        <i class="fas fa-handshake text-3xl"></i>
+                    </div>
+                    <div class="mt-6 font-semibold text-xl">Partnership &amp; Fundraising Power</div>
+                    <p class="mt-3 text-sm leading-relaxed text-slate-400">1-click demos, clear Golden Paths, and professional orchestration make it dramatically easier to onboard FTH partners, talent programs, and institutional players.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Can Now Be Done -->
+    <section id="capabilities" class="max-w-7xl mx-auto px-6 py-20">
+        <div class="max-w-3xl">
+            <div class="text-amber-400 text-sm font-semibold tracking-[2px]">THE OPPORTUNITY</div>
+            <h3 class="section-header mt-3">What Can Now Be Done</h3>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="p-6 border border-slate-700 rounded-3xl">
+                <div class="font-semibold">Instant Multi-Chain Deployment</div>
+                <div class="mt-3 text-sm text-slate-400">Spin up any combination of the 9 rails with one command or Codespaces. Run full end-to-end Golden Paths in minutes instead of months.</div>
+            </div>
+            <div class="p-6 border border-slate-700 rounded-3xl">
+                <div class="font-semibold">Production Sports &amp; NIL Capital</div>
+                <div class="mt-3 text-sm text-slate-400">Deploy high-throughput ticket systems on Avalanche + Sui, settle in sBTC on Stacks, trade on XRPL, and prove everything on-chain.</div>
+            </div>
+            <div class="p-6 border border-slate-700 rounded-3xl">
+                <div class="font-semibold">Institutional &amp; Compliance Flows</div>
+                <div class="mt-3 text-sm text-slate-400">Use the Besu permissioned rail + Chainlink PoR for banking-grade use cases while maintaining the public rails for liquidity and distribution.</div>
+            </div>
+            <div class="p-6 border border-slate-700 rounded-3xl">
+                <div class="font-semibold">AI-Orchestrated Operations</div>
+                <div class="mt-3 text-sm text-slate-400">Use the Sovereign Orchestrator to run evolutionary simulations, generate optimal configs, and manage the entire empire with natural language.</div>
+            </div>
+            <div class="p-6 border border-slate-700 rounded-3xl">
+                <div class="font-semibold">Verifiable Partner Onboarding</div>
+                <div class="mt-3 text-sm text-slate-400">Share 1-click environments, complete flow diagrams, and cryptographic proof manifests. Build trust instantly with potential partners and talent programs.</div>
+            </div>
+            <div class="p-6 border border-slate-700 rounded-3xl">
+                <div class="font-semibold">Revenue-Generating Applications</div>
+                <div class="mt-3 text-sm text-slate-400">Build on top of the parallel stablecoin engine, proof portals, and cross-chain revenue split infrastructure for real utility products.</div>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-slate-900 border border-slate-700 rounded-3xl p-8 md:p-10">
+            <div class="max-w-2xl">
+                <div class="font-semibold text-xl">Ready to activate the next phase?</div>
+                <p class="text-slate-400 mt-2">The infrastructure is built. The orchestration is professional. The proofs are in place.</p>
+                
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <a href="https://github.com/FTHTrading/troptions-rails" target="_blank" 
+                       class="inline-flex px-6 h-12 items-center justify-center rounded-2xl border border-slate-600 hover:bg-slate-800 transition font-medium text-sm">
+                        View Full Repository
+                    </a>
+                    <a href="https://github.com/codespaces/new?hide_repo_selector=true&amp;ref=main&amp;repo=FTHTrading/troptions-rails" target="_blank" 
+                       class="inline-flex px-6 h-12 items-center justify-center bg-amber-500 hover:bg-amber-400 transition font-semibold text-sm text-slate-950 rounded-2xl">
+                        <i class="fas fa-rocket mr-2"></i> Start Building Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-800 bg-black py-12">
+        <div class="max-w-7xl mx-auto px-6 text-sm text-slate-400">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-y-4">
+                <div>
+                    © TROPTIONS RAILS — FTH Trading / UnyKorn. Sovereign infrastructure for real use.
+                </div>
+                <div class="flex gap-x-6">
+                    <a href="https://github.com/FTHTrading/troptions-rails" class="hover:text-white">GitHub</a>
+                    <a href="#how-it-works" class="hover:text-white">Documentation</a>
+                    <a href="https://github.com/FTHTrading/troptions-rails/blob/main/docs/FLOW_TREES.md" class="hover:text-white">Flow Trees</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#f59e0b');
+        }
+
+        // Initialize Mermaid
+        function initializeMermaid() {
+            mermaid.initialize({ 
+                startOnLoad: false,
+                theme: 'dark',
+                securityLevel: 'loose'
+            });
+
+            // High-level mindmap
+            const mindmapEl = document.getElementById('mermaid-mindmap');
+            if (mindmapEl) {
+                mindmapEl.innerHTML = `
+                    <pre class="mermaid">
+mindmap
+  root((TROPTIONS
+  Sovereign Empire))
+    Activation
+      1-Click (Codespaces + activate.sh)
+      Sovereign Orchestrator
+      Composer Fast (parallel)
+    Rails Hub
+      Troptions Rails Registry
+      Golden Path (14+ steps)
+      BridgePayload Standard
+    9 Rails
+      Solana (Live)
+      Avalanche (HyperVM)
+      Stacks (sBTC)
+      Base (OP Stack)
+      Sui (Move)
+      Cosmos IBC (Hermes)
+      XRPL (Live DEX)
+      Besu (Permissioned)
+      Chainlink (Oracles)
+    Cross-Chain
+      Wormhole / Teleporter
+      IBC (Hermes)
+      Chainlink CCIP
+    Proof & Ops
+      IPFS + Cloudflare
+      GMIIE / XXXIII
+      Legacy Vault 5-Proof
+      donkai Evolutionary Sims
+                    </pre>
+                `;
+                mermaid.run({ nodes: [mindmapEl.querySelector('.mermaid')] });
+            }
+
+            // Sequence diagram
+            const sequenceEl = document.getElementById('mermaid-sequence');
+            if (sequenceEl) {
+                sequenceEl.innerHTML = `
+                    <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant Mint as troptionsmint.com
+    participant Solana
+    participant Wormhole
+    participant Chainlink
+    participant Avalanche
+    participant Stacks
+    participant Cosmos as Cosmos IBC
+    participant XRPL
+    participant Proof as Proof System
+
+    User->>Mint: Initiate NIL flow
+    Mint->>Solana: Create BridgePayload
+    Solana->>Wormhole: Emit VAA
+    Wormhole->>Chainlink: VRF for outcome
+    Chainlink->>Avalanche: Verified randomness
+    Avalanche->>Stacks: sBTC settlement leg
+    Avalanche->>Cosmos: IBC packet (oracles)
+    Cosmos->>XRPL: Trade/AMM coordination
+    XRPL->>Proof: Emit proof packet
+    Proof->>User: Revenue split + attestations
+                    </pre>
+                `;
+                mermaid.run({ nodes: [sequenceEl.querySelector('.mermaid')] });
+            }
+        }
+
+        // Simple smooth scroll for nav
+        function setupNavigation() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+
+        // Keyboard shortcut for Codespaces
+        function setupShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                if (e.metaKey && e.key === "/") {
+                    e.preventDefault();
+                    window.open('https://github.com/codespaces/new?hide_repo_selector=true&ref=main&repo=FTHTrading/troptions-rails', '_blank');
+                }
+            });
+        }
+
+        // Initialize everything
+        function init() {
+            initializeTailwind();
+            initializeMermaid();
+            setupNavigation();
+            setupShortcuts();
+            
+            // Add subtle animation to rail cards
+            const cards = document.querySelectorAll('.rail-card');
+            cards.forEach((card, i) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    card.style.transitionDelay = (i * 60) + 'ms';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 200);
+            });
+
+            console.log('%c[TROPTIONS] Professional site initialized', 'color:#64748b');
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
