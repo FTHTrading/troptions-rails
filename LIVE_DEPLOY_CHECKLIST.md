@@ -39,6 +39,12 @@
    - troptions-pro-site-polished.html (add to "Live Hashes" table)
    - Then re-push site + docs.
 
+   To generate the table rows for the site:
+   ```bash
+   python Scripts/e2e_golden_path.py --print-snippet
+   ```
+   Paste the output into the site table.
+
 5. **Update & Verify**
    - Re-run full: python Scripts/e2e_golden_path.py --phase 5 --mode simulate (now mixes real if you patched)
    - Run orchestrator: python AI_Agents_Hub/troptions_sovereign_orchestrator.py → "get all systems 100%"
@@ -52,7 +58,8 @@
    - Extend to Solana or XRPL leg for full 14-step.
 
 ## Example Real Hash Targets (update these)
-- Fuji VRF/NIL: https://testnet.snowtrace.io/tx/0x...
+- Fuji VRF request: https://testnet.snowtrace.io/tx/0x...
+- NIL mint + payout: https://testnet.snowtrace.io/tx/0x...
 - Solana program interaction: https://solscan.io/tx/...
 - XRPL tx: https://testnet.xrpl.org/transactions/...
 
