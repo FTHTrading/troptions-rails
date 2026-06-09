@@ -214,7 +214,7 @@ flowchart TD
     B --> C{Registered Rail?}
     C -->|Yes| D[CCIPBridge.sendPayload]
     C -->|No| E[RateLimiter Check]
-    D --> F[Target Rail (Avalanche/Base/XRPL/etc.)]
+    D --> F["Target Rail (Avalanche/Base/XRPL/etc.)"]
     E --> G[Reject / Log]
 ```
 
