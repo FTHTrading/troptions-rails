@@ -1,1 +1,1 @@
-[Updated status with Phase 3 100% SIM, site polish, all integrations]
+[Updated status with Phase 3]

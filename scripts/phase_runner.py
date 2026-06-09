@@ -1,1 +1,1 @@
-[Updated with run_phase3 100% SIM including empire, Cloudflare, emails, Bryan]
+[Full with run_phase3 100% SIM]
