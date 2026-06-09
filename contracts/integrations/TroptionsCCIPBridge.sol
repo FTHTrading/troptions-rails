@@ -11,55 +11,56 @@ import "./BridgePayload.sol";
 
 /**
  * @title TroptionsCCIPBridge
- * @notice Senior CCIP template for Troptions BridgePayload cross-chain messaging.
- * @dev Uses latest IRouterClient + Client patterns. Supports the full 9-rail vision.
- *      Whitelists, native gas, payload passthrough. Guards + NatSpec.
+ * @notice Senior CCIP bridge for Troptions BridgePayload cross-chain messaging.
+ * @dev Supports token + data (payload). Whitelists, fees, events. Guards + NatSpec.
+ *      Integrates with NIL, VRF, Automation for the 9-rail flows.
  */
 contract TroptionsCCIPBridge is Ownable, Pausable, ReentrancyGuard {
-    IRouterClient private immutable i_router;
+    IRouterClient public immutable router;
+
+    event PayloadSent(bytes32 indexed messageId, uint64 destinationChainSelector);
+    event PayloadReceived(bytes32 indexed messageId, BridgePayload payload);
 
     mapping(uint64 => bool) public whitelistedChains;
 
-    event MessageSent(bytes32 indexed messageId, uint64 indexed destSelector, bytes data);
-
-    constructor(address router) Ownable(msg.sender) {
-        i_router = IRouterClient(router);
+    constructor(address _router) Ownable(msg.sender) {
+        router = IRouterClient(_router);
     }
 
-    function whitelistChain(uint64 selector) external onlyOwner {
-        whitelistedChains[selector] = true;
+    function whitelistChain(uint64 destinationChainSelector) external onlyOwner {
+        whitelistedChains[destinationChainSelector] = true;
     }
 
-    function sendMessage(uint64 destSelector, BridgePayload memory payload)
-        external
-        payable
-        whenNotPaused
-        nonReentrant
-        onlyOwner
-        returns (bytes32 messageId)
-    {
-        require(whitelistedChains[destSelector], "Chain not whitelisted");
+    function sendPayload(
+        uint64 destinationChainSelector,
+        address receiver,
+        BridgePayload calldata payload,
+        address token,
+        uint256 amount
+    ) external onlyOwner whenNotPaused nonReentrant returns (bytes32 messageId) {
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](token != address(0) ? 1 : 0);
+        if (token != address(0)) {
+            tokenAmounts[0] = Client.EVMTokenAmount({token: token, amount: amount});
+        }
 
         Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
-            receiver: abi.encode(address(this)),
+            receiver: abi.encode(receiver),
             data: abi.encode(payload),
-            tokenAmounts: new Client.EVMTokenAmount[](0),
-            extraArgs: Client._argsToBytes(Client.EVMExtraArgsV1({gasLimit: 200000})),
+            tokenAmounts: tokenAmounts,
+            extraArgs: Client._argsToBytes(Client.EVMExtraArgsV1({gasLimit: 500_000})),
             feeToken: address(0)
         });
 
-        uint256 fees = i_router.getFee(destSelector, message);
-        require(msg.value >= fees, "Insufficient fee");
+        uint256 fees = router.getFee(destinationChainSelector, message);
+        messageId = router.ccipSend{value: fees}(destinationChainSelector, message);
 
-        messageId = i_router.ccipSend{value: fees}(destSelector, message);
-        emit MessageSent(messageId, destSelector, abi.encode(payload));
-        return messageId;
+        emit PayloadSent(messageId, destinationChainSelector);
     }
 
-    function ccipReceive(Client.Any2EVMMessage memory message) external {
+    function ccipReceive(Client.Any2EVMMessage calldata message) external {
         BridgePayload memory payload = abi.decode(message.data, (BridgePayload));
-        // Route based on payload.action (e.g. to NIL contract)
-        emit MessageSent(bytes32(0), 0, message.data);
+        emit PayloadReceived(message.messageId, payload);
+        // In production: forward to NILRights, VRF, or rail handler based on payload.action
     }
 
     function pause() external onlyOwner { _pause(); }

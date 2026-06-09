@@ -10,72 +10,75 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title TroptionsNILRights
- * @notice Senior core template for NIL bundle minting and performance payouts.
- * @dev Consumes VRF seed from TroptionsSportsVRF for fair attributes/royalties.
- *      Requires LPS-1 provenance (lps1Hash). Emits BridgePayload on mint/payout for CCIP cross-rail.
- *      Direct stable integration. Ready for TroptionsAutomation.
- *      Pausable, ReentrancyGuard, full NatSpec.
+ * @notice Senior core contract for minting NIL bundles and executing performance-based payouts.
+ * @dev Uses BridgePayload for unified cross-rail data. Consumes VRF seed for fair attributes.
+ *      Requires valid LPS-1 hash for provenance (XXXIII/GMIIE). Emits payloads for CCIP/Automation.
+ *      Direct stablecoin support. Production patterns: guards, NatSpec, custom errors.
  */
 contract TroptionsNILRights is Ownable, Pausable, ReentrancyGuard {
     TroptionsSportsVRF public vrf;
     IERC20 public stablecoin;
 
-    mapping(bytes32 => bool) public minted;
-    mapping(bytes32 => uint256) public athletePayouts;
+    mapping(bytes32 => bool) public isMinted;
+    mapping(bytes32 => uint256) public athletePayout;
     mapping(bytes32 => uint256) public eventPayoutPool;
 
-    event NILMinted(bytes32 indexed assetId, address indexed athlete, uint256 amount, uint256 attribute);
-    event NILPayoutExecuted(bytes32 indexed eventId, address indexed athlete, uint256 amount, uint256 randomOutcome);
+    event NILMinted(bytes32 indexed assetId, address indexed athlete, uint256 amount, bytes32 lps1Hash);
+    event NILPayoutExecuted(bytes32 indexed eventId, address indexed athlete, uint256 amount);
     event BridgePayloadEmitted(bytes32 indexed payloadHash, BridgePayload payload);
 
-    constructor(address _vrf, address _stable) Ownable(msg.sender) {
+    error AlreadyMinted();
+    error MissingLPS1Hash();
+    error VRFNotFulfilled();
+    error InvalidAmount();
+    error InsufficientPool();
+
+    constructor(address _vrf, address _stablecoin) Ownable(msg.sender) {
         vrf = TroptionsSportsVRF(_vrf);
-        stablecoin = IERC20(_stable);
+        stablecoin = IERC20(_stablecoin);
     }
 
-    function setVRF(address _vrf) external onlyOwner { vrf = TroptionsSportsVRF(_vrf); }
-    function setStablecoin(address _stable) external onlyOwner { stablecoin = IERC20(_stable); }
+    function setVRF(address _vrf) external onlyOwner {
+        vrf = TroptionsSportsVRF(_vrf);
+    }
 
-    function mintNILBundle(BridgePayload calldata payload) external whenNotPaused nonReentrant {
-        require(!minted[payload.assetId], "Already minted");
-        require(payload.lps1Hash != bytes32(0), "Missing LPS-1 / XXXIII provenance");
+    function setStablecoin(address _stablecoin) external onlyOwner {
+        stablecoin = IERC20(_stablecoin);
+    }
 
-        uint256 seed = vrf.eventRandomSeed(payload.eventId);
-        require(seed != 0, "VRF not fulfilled");
+    function mintNIL(BridgePayload calldata payload) external onlyOwner whenNotPaused nonReentrant {
+        if (isMinted[payload.assetId]) revert AlreadyMinted();
+        if (payload.lps1Hash == bytes32(0)) revert MissingLPS1Hash();
+        if (vrf.eventRandomSeed(payload.eventId) == 0) revert VRFNotFulfilled();
 
-        uint256 attribute = seed % 100;
-
-        minted[payload.assetId] = true;
+        isMinted[payload.assetId] = true;
         eventPayoutPool[payload.eventId] += payload.amount;
 
-        emit NILMinted(payload.assetId, payload.receiver, payload.amount, attribute);
+        emit NILMinted(payload.assetId, payload.receiver, payload.amount, payload.lps1Hash);
 
         BridgePayload memory p = payload;
         p.action = "MINT_NIL";
-        p.data = abi.encode(attribute);
         bytes32 h = BridgePayloadLib.hash(p);
         emit BridgePayloadEmitted(h, p);
     }
 
-    function executePayout(bytes32 eventId, address athlete, uint256 amount) external whenNotPaused nonReentrant {
-        require(amount > 0, "Invalid amount");
-        require(eventPayoutPool[eventId] >= amount, "Insufficient pool");
-        require(athletePayouts[eventId] == 0, "Already paid");
+    function executePayout(bytes32 eventId, address athlete, uint256 amount) external onlyOwner whenNotPaused nonReentrant {
+        if (amount == 0) revert InvalidAmount();
+        if (eventPayoutPool[eventId] < amount) revert InsufficientPool();
 
-        athletePayouts[eventId] = amount;
+        athletePayout[eventId] = amount;
         eventPayoutPool[eventId] -= amount;
 
         if (address(stablecoin) != address(0)) {
-            stablecoin.transfer(athlete, amount); // prod: consider pull/treasury
+            stablecoin.transfer(athlete, amount);
         }
 
-        uint256 outcome = vrf.eventRandomSeed(eventId);
-        emit NILPayoutExecuted(eventId, athlete, amount, outcome);
+        emit NILPayoutExecuted(eventId, athlete, amount);
 
         BridgePayload memory p = BridgePayload({
             version: 1,
             timestamp: block.timestamp,
-            sourceChainSelector: 0, // Avalanche
+            sourceChainSelector: 0, // Avalanche selector
             destChainSelector: 0,   // e.g. Base
             assetId: keccak256(abi.encodePacked("NIL", eventId)),
             eventId: eventId,
@@ -83,7 +86,7 @@ contract TroptionsNILRights is Ownable, Pausable, ReentrancyGuard {
             receiver: athlete,
             amount: amount,
             action: "PAYOUT",
-            data: abi.encode(outcome),
+            data: "",
             lps1Hash: bytes32(0),
             gmiiSignature: bytes32(0)
         });
@@ -91,7 +94,9 @@ contract TroptionsNILRights is Ownable, Pausable, ReentrancyGuard {
         emit BridgePayloadEmitted(h, p);
     }
 
-    function getPayout(bytes32 eventId) external view returns (uint256) { return athletePayouts[eventId]; }
+    function getPayout(bytes32 eventId) external view returns (uint256) {
+        return athletePayout[eventId];
+    }
 
     function pause() external onlyOwner { _pause(); }
     function unpause() external onlyOwner { _unpause(); }

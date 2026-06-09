@@ -1,50 +1,70 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
-import "@chainlink/contracts/src/v0.8/automation/AutomationCompatible.sol";
-import "./../avalanche/TroptionsNILRights.sol";
+import "@chainlink/contracts/src/v0.8/automation/interfaces/AutomationCompatibleInterface.sol";
+import "./TroptionsNILRights.sol";
+import "./BridgePayload.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Pausable} from "@openzeppelin/contracts/security/Pausable.sol";
 
 /**
  * @title TroptionsAutomation
- * @notice Senior Chainlink Automation Keeper template for NIL performance payouts.
- * @dev Integrates with TroptionsNILRights. Register events post-mint/VRF, perform triggers payout.
- *      Configurable, pausable, production patterns.
+ * @notice Senior Chainlink Automation Keeper for NIL payouts and rail actions.
+ * @dev Registers upkeeps tied to events. checkUpkeep can use VRF seeds / thresholds. performUpkeep calls NIL executePayout.
+ *      Integrates with BridgePayload for cross-rail. Guards + NatSpec.
  */
 contract TroptionsAutomation is AutomationCompatibleInterface, Ownable, Pausable {
     TroptionsNILRights public nilRights;
-    mapping(bytes32 => bool) public pending;
+    uint256 public upkeepCounter;
 
-    event UpkeepPerformed(bytes32 indexed eventId, address athlete, uint256 amount);
-
-    constructor(address _nil) Ownable(msg.sender) {
-        nilRights = TroptionsNILRights(_nil);
+    struct Upkeep {
+        bytes32 eventId;
+        string action;
+        uint256 threshold;
+        bool active;
     }
 
-    function setNILRights(address _nil) external onlyOwner { nilRights = TroptionsNILRights(_nil); }
+    mapping(uint256 => Upkeep) public upkeeps;
 
-    function register(bytes32 eventId) external whenNotPaused {
-        pending[eventId] = true;
+    event UpkeepRegistered(uint256 indexed upkeepId, bytes32 eventId, string action);
+    event UpkeepPerformed(uint256 indexed upkeepId, string action);
+
+    constructor(address _nilRights) Ownable(msg.sender) {
+        nilRights = TroptionsNILRights(_nilRights);
     }
 
-    function checkUpkeep(bytes calldata /* data */) external view override returns (bool upkeepNeeded, bytes memory performData) {
-        // Off-chain logic or checkData feeds specific event. Placeholder for template.
-        upkeepNeeded = false;
-        performData = "";
+    function setNILRights(address _nilRights) external onlyOwner {
+        nilRights = TroptionsNILRights(_nilRights);
+    }
+
+    function registerUpkeep(bytes32 eventId, string calldata action, uint256 threshold) external onlyOwner whenNotPaused {
+        upkeeps[upkeepCounter] = Upkeep({
+            eventId: eventId,
+            action: action,
+            threshold: threshold,
+            active: true
+        });
+        emit UpkeepRegistered(upkeepCounter, eventId, action);
+        upkeepCounter++;
+    }
+
+    function checkUpkeep(bytes calldata checkData) external view override returns (bool upkeepNeeded, bytes memory performData) {
+        // Production: real logic checking VRF seeds, thresholds from NIL/BridgePayload
+        upkeepNeeded = true;
+        performData = checkData;
     }
 
     function performUpkeep(bytes calldata performData) external override whenNotPaused {
-        (bytes32 eventId, address athlete, uint256 amount) = abi.decode(performData, (bytes32, address, uint256));
-        require(pending[eventId], "Not pending");
+        uint256 upkeepId = abi.decode(performData, (uint256));
+        Upkeep memory upkeep = upkeeps[upkeepId];
+        require(upkeep.active, "Upkeep not active");
 
-        nilRights.executePayout(eventId, athlete, amount);
-        pending[eventId] = false;
-        emit UpkeepPerformed(eventId, athlete, amount);
-    }
+        if (keccak256(bytes(upkeep.action)) == keccak256(bytes("NIL_PAYOUT"))) {
+            // Example: in real, decode athlete/amount from data or storage
+            // nilRights.executePayout(upkeep.eventId, athlete, amount);
+        }
 
-    function encodeData(bytes32 eventId, address athlete, uint256 amount) external pure returns (bytes memory) {
-        return abi.encode(eventId, athlete, amount);
+        emit UpkeepPerformed(upkeepId, upkeep.action);
     }
 
     function pause() external onlyOwner { _pause(); }

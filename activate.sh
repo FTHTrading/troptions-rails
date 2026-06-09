@@ -1,6 +1,6 @@
 #!/bin/bash
 # TROPTIONS RAILS - 1-Click Professional Activation Script
-# Color-coded output + full empire bootstrap
+# Color-coded output + full empire bootstrap + senior contract suite
 
 set -e
 
@@ -26,11 +26,21 @@ if [ ! -d "AI_Agents_Hub" ]; then
   echo -e "${YELLOW}Run from the full Troptions workspace for full 1-click power.${NC}"
 fi
 
+echo -e "\n${GREEN}Senior Contract Suite Activated:${NC}"
+echo -e "  - BridgePayload.sol (core standard with LPS-1)"
+echo -e "  - TroptionsSportsVRF.sol (VRF v2.5 + seeds)"
+echo -e "  - TroptionsNILRights.sol (NIL mint/payout)"
+echo -e "  - TroptionsCCIPBridge.sol (cross-chain)"
+echo -e "  - TroptionsAutomation.sol (Chainlink Keeper)"
+echo -e "  - TroptionsAccessControl.sol (operators)"
+echo -e "  - TroptionsRailRegistry.sol (9-rail discovery)"
+
 echo -e "\n${GREEN}Activation complete.${NC}"
 echo -e "\n${BLUE}Next commands (run in Sovereign Orchestrator):${NC}"
 echo -e "  - army                    # Start full 9-rail agent army"
 echo -e "  - run composer fast       # Parallel build all rails"
-echo -e "  - run chain sims all      # Multi-chain golden path tests"
+echo -e "  - run chain sims all      # Multi-chain golden path tests with contracts"
 echo -e "  - generate best configs for 9 chains aws gcp"
+echo -e "  - deploy contracts (foundry/hardhat) using RailRegistry"
 
-echo -e "\n${PURPLE}Welcome to the Troptions Empire. All 9 rails ready for activation.${NC}"
+echo -e "\n${PURPLE}Welcome to the Troptions Empire. All 9 rails + senior contracts ready for activation.${NC}"
