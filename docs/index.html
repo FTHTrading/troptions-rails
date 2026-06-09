@@ -20,12 +20,6 @@
         .mermaid { background: #0f172a; border-radius: 12px; padding: 1.5rem; }
         .professional-gradient { background: linear-gradient(145deg, #0f172a, #1e2937); }
         .metric { font-size: 2.75rem; line-height: 3rem; font-weight: 700; }
-        .cost-table th { background: #1e2937; }
-        .proof-badge { background: #166534; color: #86efac; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
-        .status-live { background: #166534; color: #86efac; }
-        .status-built { background: #1e40af; color: #93c5fd; }
-        .status-partial { background: #854d0e; color: #fde047; }
-        .status-planned { background: #7f1d1d; color: #fca5a5; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-200">
@@ -133,14 +127,23 @@
             <div><h4 class="font-semibold text-xl mb-3">Golden Path (14+ Steps)</h4><p class="text-slate-400">End-to-end verified flows (sports capital/NIL) with stables for payments/settlements/revenue.</p></div>
         </div>
         <div class="mt-10"><h4 class="font-semibold mb-4">Architecture Flow Trees &amp; Charts (Mermaid — native on GitHub + here)</h4><div class="grid md:grid-cols-2 gap-4">
-            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">High-Level Empire (Flow Tree)</div><pre class="mermaid text-[10px]">mindmap
-  root((TROPTIONS Sovereign Empire))
-    9 Rails (🟢LIVE 🔵BUILT 🟠PARTIAL 🔴PLANNED)
-    Stablecoins (USDT/USDC/RLUSD/PAXO +)
-    BridgePayload + Golden Path
-    AI Orchestrator + Composer
-    Cloudflare Web3 (IPFS/Ethereum)
-    Full Proof System</pre></div>
+            <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">High-Level Empire (Flow Tree)</div><pre class="mermaid text-[10px]">flowchart TD
+    A[User Intent + Stable USDT/USDC] --> B[BridgePayload Created]
+    B --> C{Bridge Router Wormhole/IBC/CCIP}
+    C --> D[Solana Intake + Mint]
+    C --> E[Avalanche VRF/NIL/RWAToken]
+    C --> F[Stacks sBTC]
+    C --> G[Base Liquidity]
+    C --> H[Sui Parallel]
+    C --> I[Cosmos IBC]
+    C --> J[XRPL Trading]
+    C --> K[Besu CBDC/Compliance]
+    C --> L[Chainlink Oracles]
+    C --> M[RateLimiter/TokenFactory]
+    D & E & F & G & H & I & J & K & L & M --> N[Attestation + Proofs]
+    N --> O[IPFS + Cloudflare Web3]
+    O --> P[Legacy Vault / Revenue]
+    P --> Q[Operator OS / GMIIE HUD]</pre></div>
             <div class="flow-tree p-5"><div class="text-xs uppercase tracking-widest mb-3 text-slate-400">Golden Path Sequence</div><pre class="mermaid text-[10px]">sequenceDiagram
     User->>Solana: Intent + USDC
     Solana->>Wormhole: BridgePayload
@@ -173,7 +176,6 @@
         </div>
     </section>
 
-    <!-- INTEGRATED: STABLES + CONTRACTS SECTIONS (color coded professional, TOC, sr real code) -->
     <section id="stables" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800">
       <div class="max-w-3xl mb-8"><div class="text-amber-400 text-xs font-semibold tracking-widest">DIRECT SYSTEM INTEGRATIONS</div><h3 class="section-header mt-2">Stablecoin Engine (USDT / USDC / RLUSD / PAXO +)</h3></div>
       <p class="text-slate-400 max-w-3xl mb-6">Stables are wired into BridgePayload, Golden Path flows, VRF/NIL payouts, live rails (XRPL issued, Solana mint, Besu private), and CCIP cross-chain. Real engine, not just mentions.</p>
@@ -189,23 +191,23 @@
           </tbody>
         </table>
       </div>
-      <p class="mt-3 text-xs text-slate-500">See contracts/stablecoins/ + integrations + VRF/NIL/CCIP for code. All flow through unified BridgePayload (amount, assetId, peg_proof).</p>
+      <p class="mt-3 text-xs text-slate-500">See contracts/ and integrations for code. All flow through unified BridgePayload.</p>
     </section>
 
     <section id="contracts" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800">
       <div class="max-w-3xl mb-8"><div class="text-amber-400 text-xs font-semibold tracking-widest">SR DEVELOPED • REAL CODE</div><h3 class="section-header mt-2">Real Contracts &amp; Integrations</h3></div>
-      <p class="text-slate-400 mb-6 max-w-3xl">No vaporware. Starters + full featured for key pieces (compilable, with BridgePayload + stables). Honest status per rail. Table of contents + flow trees above.</p>
+      <p class="text-slate-400 mb-6 max-w-3xl">No vaporware. Starters + full featured for key pieces (compilable, with BridgePayload + stables). See full details and grid in <a href="https://github.com/FTHTrading/troptions-rails/blob/main/CONTRACT_TEMPLATES.md" class="text-amber-400 hover:underline">CONTRACT_TEMPLATES.md</a> and the repo contracts/ folder. Honest status per rail.</p>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">Avalanche (🔵 BUILT)</div><div class="text-xs text-blue-400 mb-2">TroptionsSportsVRF.sol + TroptionsNILRights.sol</div><div class="text-sm text-slate-400">Chainlink VRF v2.5 randomness for sports/NIL outcomes. Stablecoin (USDC/USDT) payouts. Emits BridgePayload for cross-rail (to Base/XRPL). Full request/fulfill + owner controls.</div><a href="https://github.com/FTHTrading/troptions-rails/blob/main/contracts/avalanche/TroptionsSportsVRF.sol" target="_blank" class="text-amber-400 text-xs mt-2 inline-block hover:underline">View VRF →</a> <a href="https://github.com/FTHTrading/troptions-rails/blob/main/contracts/avalanche/TroptionsNILRights.sol" target="_blank" class="text-amber-400 text-xs mt-2 inline-block hover:underline">NILRights →</a></div>
-        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">Cross-Chain (🔵 BUILT)</div><div class="text-xs text-blue-400 mb-2">TroptionsCCIPBridge.sol</div><div class="text-sm text-slate-400">Chainlink CCIP for BridgePayload messaging across EVM rails (Avalanche ↔ Base etc). Whitelist, send/receive, fee handling. Payload carries stable + action + sigs.</div><a href="https://github.com/FTHTrading/troptions-rails/blob/main/contracts/integrations/TroptionsCCIPBridge.sol" target="_blank" class="text-amber-400 text-xs mt-2 inline-block hover:underline">View CCIP Bridge →</a></div>
-        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">BridgePayload Standard</div><div class="text-xs text-amber-400 mb-2">Unified across all</div><div class="text-sm text-slate-400">version, timestamp, chainIds, assetId (stable), eventId, sender/receiver, amount, fee, action, data, lps1Hash, gmiiSignature + keccak lib. Used in VRF, NIL, CCIP, flows.</div><div class="text-[10px] text-slate-500 mt-1">See inline in Avalanche contracts + docs/FLOW_TREES.md</div></div>
-        <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">Solana (🟢 LIVE)</div><div class="text-slate-400">Anchor (Rust) mint + intake examples with USDC/USDT. Ports from live console.</div></div>
+        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">Avalanche (🔵 BUILT)</div><div class="text-xs text-blue-400 mb-2">TroptionsSportsVRF.sol + TroptionsNILRights.sol</div><div class="text-sm text-slate-400">Chainlink VRF v2.5 for sports/NIL. Stable payouts. Emits BridgePayload. <a href="https://github.com/FTHTrading/troptions-rails/blob/main/contracts/avalanche/TroptionsSportsVRF.sol" class="text-amber-400 text-xs hover:underline">View →</a></div></div>
+        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">Cross-Chain + Core (🔵 BUILT)</div><div class="text-xs text-blue-400 mb-2">CrossChainRouter, RailRegistry, EliteSettlementCore, AtomicSettlement, etc.</div><div class="text-sm text-slate-400">Unified routing, registry, advanced settlement (atomic/multisig/conditional/provenance-locked), timelock, agent registry. <a href="https://github.com/FTHTrading/troptions-rails/tree/main/contracts" class="text-amber-400 text-xs hover:underline">Browse contracts/ →</a></div></div>
+        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">BridgePayload Standard</div><div class="text-xs text-amber-400 mb-2">Unified across all</div><div class="text-sm text-slate-400">The glue: version, selectors, assetId, eventId, stables, lps1Hash, gmiiSignature + hash lib. Used everywhere.</div></div>
+        <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">Solana (🟢 LIVE)</div><div class="text-slate-400">Anchor (Rust) mint + intake with USDC/USDT. Ports from live console.</div></div>
         <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">XRPL (🟢 LIVE)</div><div class="text-slate-400">JS gateway + issued currencies (RLUSD/USDT). Live DEX/AMM.</div></div>
-        <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">Hyperledger Besu (🟢 LIVE)</div><div class="text-slate-400">Permissioned EVM Solidity (PAXO/USDC privateTransfer). Compliance ready.</div></div>
-        <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">Other Starters (🔴 PLANNED / 🟠)</div><div class="text-slate-400">Sui Move (parallel exec + USDC), Stacks Clarity (sBTC settle), Base ERC20+Paymaster+4337, Cosmos CosmWasm (IBC stable recv), Chainlink Consumer (VRF+CCIP stubs), Web3 IPFS pin via Cloudflare.</div><div class="mt-1"><a href="https://github.com/FTHTrading/troptions-rails/tree/main/contracts" target="_blank" class="text-amber-400 text-xs hover:underline">Browse all contracts/ →</a></div></div>
-        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">Web3 + Cloudflare</div><div class="text-sm text-slate-400">IPFSWeb3Example.js (pin + gateway). Full token scopes for Pages, Workers, Email Routing (agent mail from Sovereign Orchestrator).</div><a href="https://github.com/FTHTrading/troptions-rails/blob/main/contracts/web3/IPFSWeb3Example.js" target="_blank" class="text-amber-400 text-xs hover:underline">Web3 example →</a></div>
+        <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">Hyperledger Besu (🟢 LIVE)</div><div class="text-slate-400">Permissioned EVM (PAXO/USDC private). Compliance ready.</div></div>
+        <div class="border border-slate-700 rounded-3xl p-5 text-sm"><div class="font-semibold mb-1">Institutional Layer (🔵 BUILT)</div><div class="text-slate-400">KYCCompliance, ProofVerifier, CircuitBreaker, RateLimiter, RWAToken, GovernanceTimelock, AgentRegistry, LegacyVault, GMIIEOracle, Orchestrator, StablecoinGateway + more. Full NatSpec + guards.</div></div>
+        <div class="border border-slate-700 rounded-3xl p-5"><div class="font-semibold mb-1">Web3 + Cloudflare</div><div class="text-sm text-slate-400">IPFSWeb3Example.js (pin + gateway). Full token scopes for Pages, Workers, Email Routing (agent mail).</div><a href="https://github.com/FTHTrading/troptions-rails/blob/main/contracts/web3/IPFSWeb3Example.js" target="_blank" class="text-amber-400 text-xs hover:underline">Web3 example →</a></div>
       </div>
-      <div class="mt-4 text-xs text-slate-500">All contracts are real starters (Solidity/Rust/Move/Clarity/JS). Fill addresses/subs before deploy. See DEVELOPER_GUIDE.md + tests in Sovereign Orchestrator.</div>
+      <div class="mt-4 text-xs text-slate-500">See CONTRACT_TEMPLATES.md for the complete 29-contract grid and details. Tests + CI + deploy scripts now live.</div>
     </section>
 
     <section id="investor" class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-800 bg-slate-900/30">
@@ -215,26 +217,25 @@
                 <li class="flex gap-3"><span class="text-emerald-400 mt-1">✓</span> <span><strong>9 Rails (LIVE/BUILT + docs)</strong>: Real contracts for Avalanche (VRF + NILRights), CCIP Bridge, stables, Web3. Live: XRPL, Solana, Besu, x402, etc.</span></li>
                 <li class="flex gap-3"><span class="text-emerald-400 mt-1">✓</span> <span><strong>Stablecoin Engine</strong>: Direct USDT/USDC/RLUSD/PAXO/DAI/PYUSD in BridgePayload, live rails, wrappers.</span></li>
                 <li class="flex gap-3"><span class="text-emerald-400 mt-1">✓</span> <span><strong>Orchestration + Proofs</strong>: Sovereign Orchestrator, 1-click, full proofs (IPFS + Cloudflare Web3 + GMIIE).</span></li>
-                <li class="flex gap-3"><span class="text-emerald-400 mt-1">✓</span> <span><strong>Professional Site + Docs</strong>: Deployed, color-coded, flow trees, investor costs, Cloudflare/Web3. TOC, charts, sr contracts.</span></li>
-                <li class="flex gap-3"><span class="text-emerald-400 mt-1">✓</span> <span><strong>Execution Depth (v0.1.0)</strong>: Foundry test suites + Slither CI, executable E2E harness (scripts/), deploy scripts for 5+ core, releases.</span></li>
+                <li class="flex gap-3"><span class="text-emerald-400 mt-1">✓</span> <span><strong>Professional Site + Docs + CI</strong>: Deployed, color-coded, flow trees, investor costs, Cloudflare/Web3. Full Foundry tests + Slither in CI. Executable E2E harness + deploy scripts.</span></li>
             </ul></div>
             <div class="lg:col-span-5"><h4 class="font-semibold text-xl mb-4">Sr. Elite Costs (Realistic)</h4><div class="bg-slate-950 border border-slate-700 rounded-3xl p-6 text-sm"><table class="w-full"><tr class="border-b"><th>Component</th><th class="text-right">Cost</th></tr><tr><td>9 Rails Subtotal</td><td class="text-right font-mono">$1.4M–$2.14M</td></tr><tr><td>Orchestrator + Composer</td><td class="text-right font-mono">$180k–$280k</td></tr><tr><td>BridgePayload + Engine</td><td class="text-right font-mono">$220k–$340k</td></tr><tr><td>Proof + Site + Docs</td><td class="text-right font-mono">$150k–$240k</td></tr><tr><td>Cross-Chain + QA</td><td class="text-right font-mono">$200k–$310k</td></tr><tr class="border-t font-semibold"><td>Total</td><td class="text-right font-mono text-amber-400">$2.15M–$3.31M</td></tr></table><p class="mt-3 text-[11px] text-slate-500">Sr. elite teams, prod security, docs, direct stables/Web3. Cloudflare free tier.</p></div></div>
         </div>
         <div class="mt-8 p-6 bg-slate-900 border border-slate-700 rounded-3xl">
             <div class="font-semibold mb-3">Proof It's Built (Verifiable)</div>
             <div class="grid md:grid-cols-3 gap-4 text-sm">
-                <div class="border border-slate-700 rounded-3xl p-7"><div class="proof-badge mb-4 inline-block">VERIFIABLE</div><div class="font-semibold mb-2">Deployed Site (GitHub Pages + Web3)</div><p class="text-sm text-slate-400">Live: https://fthtrading.github.io/troptions-rails/ . Web3 via Cloudflare IPFS/Ethereum gateways (ecosystem config + token).</p><a href="https://fthtrading.github.io/troptions-rails" class="mt-4 inline-block text-amber-400 hover:underline text-sm">View Live →</a></div>
-                <div class="border border-slate-700 rounded-3xl p-7"><div class="proof-badge mb-4 inline-block">VERIFIABLE</div><div class="font-semibold mb-2">Cloudflare + Web3</div><p class="text-sm text-slate-400">Token verified active. Pages + Web3 gateways (IPFS/Ethereum) in ecosystem. Agent mail via Email Routing. API calls in history.</p><a href="https://github.com/FTHTrading/troptions-rails/blob/main/docs/DEVELOPER_GUIDE.md" class="mt-4 inline-block text-amber-400 hover:underline text-sm">Dev Guide →</a></div>
-                <div class="border border-slate-700 rounded-3xl p-7"><div class="proof-badge mb-4 inline-block">VERIFIABLE</div><div class="font-semibold mb-2">1-Click + Real Integrations + Execution</div><p class="text-sm text-slate-400">activate.sh, orchestrator, stables in code, BridgePayload, Golden Path in docs + contracts. Tests/CI, harness, deploy scripts live. Web3 for site/proofs.</p><a href="https://github.com/codespaces/new?hide_repo_selector=true&ref=main&repo=FTHTrading/troptions-rails" class="mt-4 inline-block text-amber-400 hover:underline text-sm">1-Click Now →</a></div>
+                <div class="border border-slate-700 rounded-3xl p-7"><div class="proof-badge mb-4 inline-block">VERIFIABLE</div><div class="font-semibold mb-2">Deployed Site (GitHub Pages + Web3)</div><p class="text-sm text-slate-400">Live: https://fthtrading.github.io/troptions-rails/ . Web3 via Cloudflare IPFS/Ethereum gateways.</p><a href="https://fthtrading.github.io/troptions-rails" class="mt-4 inline-block text-amber-400 hover:underline text-sm">View Live →</a></div>
+                <div class="border border-slate-700 rounded-3xl p-7"><div class="proof-badge mb-4 inline-block">VERIFIABLE</div><div class="font-semibold mb-2">Cloudflare + Web3 + CI</div><p class="text-sm text-slate-400">Token verified active. Pages + Web3 gateways. Foundry + Slither CI running. .nojekyll for clean static deploys.</p><a href="https://github.com/FTHTrading/troptions-rails/blob/main/docs/DEVELOPER_GUIDE.md" class="mt-4 inline-block text-amber-400 hover:underline text-sm">Dev Guide →</a></div>
+                <div class="border border-slate-700 rounded-3xl p-7"><div class="proof-badge mb-4 inline-block">VERIFIABLE</div><div class="font-semibold mb-2">1-Click + Real Integrations + Tracking</div><p class="text-sm text-slate-400">activate.sh, orchestrator, stables in code, BridgePayload, Golden Path. See GitHub Issues for the 7 priority gaps (atomic swaps, E2E hashes, deploys, audits...).</p><a href="https://github.com/FTHTrading/troptions-rails/issues" class="mt-4 inline-block text-amber-400 hover:underline text-sm">Open Issues →</a></div>
             </div>
         </div>
-        <div class="mt-8 text-center text-xs text-slate-500">All built at sr-elite level. Public commits, live site, real code, Cloudflare token verified, Web3 gateways active in ecosystem. Color-coded professional with flow trees, charts, table of contents. v0.1.0: tests/CI/harness/deploys added.</div>
+        <div class="mt-8 text-center text-xs text-slate-500">All built at sr-elite level. Public commits, live site, real code, Cloudflare token verified, Web3 gateways active. Color-coded professional with flow trees, charts, table of contents. Clean Mermaid + 7 tracking Issues live.</div>
     </section>
 
     <footer class="border-t border-slate-800 py-12">
         <div class="max-w-7xl mx-auto px-6 text-sm text-slate-400 flex flex-col md:flex-row justify-between gap-y-4">
-            <div>© TROPTIONS RAILS — FTH Trading / UnyKorn. Sr. elite, color-coded, Web3, real contracts. Flow trees &amp; charts integrated. Tests + harness + deploys (v0.1.0).</div>
-            <div class="flex gap-x-6"><a href="https://github.com/FTHTrading/troptions-rails" class="hover:text-white">GitHub</a> <a href="https://fthtrading.github.io/troptions-rails" class="hover:text-white">Live Site</a> <a href="#investor" class="hover:text-white">Investor</a></div>
+            <div>© TROPTIONS RAILS — FTH Trading / UnyKorn. Sr. elite, color-coded, Web3, real contracts. Flow trees &amp; charts integrated. Clean deploys + Issues tracking.</div>
+            <div class="flex gap-x-6"><a href="https://github.com/FTHTrading/troptions-rails" class="hover:text-white">GitHub</a> <a href="https://fthtrading.github.io/troptions-rails" class="hover:text-white">Live Site</a> <a href="#investor" class="hover:text-white">Investor</a> <a href="https://github.com/FTHTrading/troptions-rails/issues" class="hover:text-white">Issues</a></div>
         </div>
     </footer>
 
