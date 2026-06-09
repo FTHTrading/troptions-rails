@@ -1,28 +1,21 @@
-**Troptions Senior-Level Contract Template Suite (Expanded - 16 Contracts)**
+**Troptions Senior-Level Contract Template Suite (Expanded - 17+ Contracts, All Systems)**
 
-Production-grade, audit-ready Solidity templates for the Troptions 9-rail system (practical focus: XRPL, Solana, Base, Avalanche, Stacks/sBTC, Chainlink + Bitcoin/Stellar as core; others as adapters/future).
+Production-grade, audit-ready templates for the Troptions 9-rail system (practical focus: XRPL, Solana, Base, Avalanche, Stacks/sBTC, Chainlink + Bitcoin/Stellar as core; others as adapters/future). Now includes high-level institutional settlement + native adapters for non-EVM rails.
 
-**Core Contracts (polished with NatSpec, guards, BridgePayload (uint64 selectors), LPS-1, stables):**
+**Core EVM/Settlement (1-17+):**
+- [previous 1-16 including BridgePayload, VRF, NIL, CCIP, Automation, AccessControl, RailRegistry, StablecoinGateway, RailConnector, LegacyVault, GMIIEOracle, Orchestrator, FeeManager, AtomicSettlement, FinalityRouter, MultiSigEscrow, SettlementHub, EliteSettlementCore]
 
-1-9. [previous list including BridgePayload, VRF, NIL, CCIP, Automation, AccessControl, RailRegistry, StablecoinGateway, RailConnector, LegacyVault, GMIIEOracle, Orchestrator, FeeManager]
-
-**Institutional Settlement Infrastructure:**
-
-14. TroptionsAtomicSettlement.sol - Core Atomic Swap + Settlement (timeout protection, LPS-1, events).
-15. TroptionsFinalityRouter.sol - Multi-Chain Finality + Settlement Router (trusted chains, nonce protection, ties to atomic).
-16. TroptionsMultiSigEscrow.sol - Institutional Multi-Sig Escrow (multi-signer release for high-value, integrated with payload).
-17. TroptionsSettlementHub.sol - Central Settlement Hub (orchestrates atomic, multisig, finality, Golden Path via Orchestrator).
+**Multi-Chain Native Adapters (BridgePayload compatible):**
+- Stacks: TroptionsNILRights.clar (Clarity for sBTC/NIL mint/claim, lps1-hash for cross-rail).
+- Solana: Anchor NIL (Rust/Anchor program with mint/claim, payload_data for EVM bridging, USDC integration).
+- Sui: nil_rights.move (Move module for parallel exec, NIL mint/claim, event emission, payload compatibility).
 
 **Usage & Integration:**
-- All use BridgePayload for unified flows (Golden Path: VRF -> NIL -> Orchestrator -> SettlementHub -> Atomic/MultiSig/FinalityRouter -> CCIP/Gateway to target rail).
-- LPS-1/XXXIII hooks in all.
-- Deploy via Foundry/Hardhat, register in RailRegistry, route via Connector/Orchestrator/Hub, control via AccessControl.
-- 1-Click via enhanced activate.sh (references full suite + settlement infra).
+- All use BridgePayload (or equivalent) for unified flows (Golden Path: VRF -> NIL -> Orchestrator/SettlementHub -> EliteSettlementCore/Atomic/MultiSig -> CCIP/Gateway to target rail or native adapter).
+- LPS-1/XXXIII hooks everywhere.
+- Deploy via Foundry (EVM), Clarinet (Stacks), Anchor (Solana), Sui CLI. Register in RailRegistry, route via Connector/Hub.
+- 1-Click via enhanced activate.sh (references full multi-chain suite).
 
-**9-Rail Adapters (BridgePayload compatible):** Enhanced starters in solana/, sui/, stacks/, etc. for full composition.
-
-See contracts/ for source. Professional site has Senior Templates box with color-coded status (🔵 BUILT for core EVM/Chainlink + settlement suite). Ready for audit, orchestrator, revenue-driven activation.
-
-Recommendation: Master the focused core + these settlement tools first for institutional NIL/RWA/stable volume.
+See contracts/ (subdirs for rails) for source. Professional site has Senior Templates box with color-coded status (🔵 BUILT for expanded suite across all systems). Ready for audit, orchestrator, institutional activation.
 
 © 2026 FTH Trading / UnyKorn
