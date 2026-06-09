@@ -1,32 +1,23 @@
-... [previous content with stablecoins etc.] ...
+... [previous content] ...
 
-## Major Integrations & Tools
+## Professional Shareable Site
 
-- **Unified BridgePayload** — Cross-chain standard.
-- **Golden Path** — 14+ step verified flows.
-- **E2E Harness** — Mock + live testing.
-- **Chainlink Full Stack** — VRF, CCIP, Automation, PoR.
-- **Proof System** — IPFS + Cloudflare + LPS-1 + GMIIE.
-- **Legacy Vault 5-Proof**.
-- **Parallel Stablecoin Engine** — Direct support for major stablecoins and assets: USDT, USDC, RLUSD, PAXO, DAI, PYUSD, TUSD + more.
-- **Cloudflare API & Infrastructure** — Full API access for hosting (Pages), Web3 gateways (IPFS/Ethereum for proofs and decentralized site access), Email Routing for agent mail/notifications. Used for deploying the professional site, managing DNS for troptions domains, and agent communications in the Sovereign Orchestrator. Token verified active with web3/worker/pages permissions. Integrated into deployment and agent system.
+A polished, self-contained website (Tailwind + Mermaid diagrams) is included in `website/index.html` and deployed to GitHub Pages for easy sharing.
 
-## Deployment
+**Live Site:** https://fthtrading.github.io/troptions-rails
 
-... [previous] ...
+It covers:
+- The 9 rails
+- How it all works + flow trees
+- Brand boost & impact
+- What can now be done
+- 1-click activation
+- Investor costs and proof
 
-### Cloudflare Deployment (Primary for Professional Site and Web3)
-- Use Cloudflare Pages for the professional site (website/index.html) via API or Wrangler (free tier).
-- Web3: Serve via Cloudflare IPFS gateway for decentralized, provable hosting of the site, docs, and proofs (CLOUDFLARE_IPFS_GATEWAY in env).
-- Agent Mail: Set up Email Routing on troptions zones for agent@ notifications from the multi-agent system.
-- GitHub Action uses CF_API_TOKEN secret for automated deploys.
-- Example in DEVELOPER_GUIDE.md and workflows.
+**Web3 Setup:** The site and proofs are integrated with Cloudflare's Web3 gateways for IPFS and Ethereum (as configured in ecosystem Pages projects with env vars like CLOUDFLARE_IPFS_GATEWAY, ETHEREUM_GATEWAY). This enables decentralized, Web3-accessible hosting of the professional site, documentation, and cryptographic proofs for full provability and censorship resistance. See DEVELOPER_GUIDE.md for details on using the gateways with the Cloudflare API token.
 
-See the professional site for live integration highlights.
+**Deploy & share:** The site is deployed on GitHub Pages (source: main /docs). For Cloudflare Pages + Web3, use the verified API token and Wrangler as documented.
 
-## Developer Documentation
+The site is also available in the repo at /docs/index.html (for Pages) and /website/index.html.
 
-... [previous] ...
-- Cloudflare API, Web3, Email Routing for agents (full section in DEVELOPER_GUIDE.md).
-
-...
+... [rest of previous content] ...
