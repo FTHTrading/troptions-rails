@@ -18,10 +18,10 @@ cd AI_Agents_Hub
 python troptions_sovereign_orchestrator.py 2>$null | Select-Object -First 5
 cd ..
 
-# 2. E2E Harness
+# 2. E2E Harness (local phase-aware)
 Write-Host "`n[2/5] E2E Golden Path Simulation..."
 cd ..
-python troptions-rails/scripts/e2e_golden_path.py --simulate
+python scripts/e2e_golden_path.py --phase 0 --mode $Mode
 
 # 3. Contracts Build/Test (if forge available)
 Write-Host "`n[3/5] Contracts Build & Test..."

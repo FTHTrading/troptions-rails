@@ -48,13 +48,13 @@ def run_phase0(mode="simulate"):
         run_cmd(f"python troptions_sovereign_orchestrator.py", cwd=AI_HUB)
     os.chdir(ROOT)
 
-    # 2. E2E
-    print("\n[2/5] E2E Golden Path...")
-    e2e = RAILS / "scripts" / "e2e_golden_path.py"
+    # 2. E2E (use local phase-aware stub)
+    print("\n[2/5] E2E Golden Path (phase-aware)...")
+    e2e = ROOT / "scripts" / "e2e_golden_path.py"
     if e2e.exists():
-        run_cmd(f"python {e2e} --simulate")
+        run_cmd(f"python {e2e} --phase {0} --mode {mode}")
     else:
-        print("  E2E script not in local troptions-rails (use GH or clone). See plan for commands.")
+        print("  Local E2E not found.")
 
     # 3. Contracts (forge)
     print("\n[3/5] Contracts build/test...")
