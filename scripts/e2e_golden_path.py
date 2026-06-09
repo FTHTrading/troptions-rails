@@ -117,7 +117,12 @@ def main():
     parser.add_argument("--amount", type=int, default=250000)
     parser.add_argument("--record-tx", default=None, help="Real tx hash to record for current step (use after live deploy)")
     parser.add_argument("--record-step", type=int, default=1, help="Which step the --record-tx belongs to")
+    parser.add_argument("--print-snippet", action="store_true", help="Print the site HTML snippet for live hashes table and exit")
     args = parser.parse_args()
+
+    if args.print_snippet:
+        print_site_hashes_snippet()
+        return
 
     if args.record_tx:
         record_real_tx(args.record_step, args.record_tx)
